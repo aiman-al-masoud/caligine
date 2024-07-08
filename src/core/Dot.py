@@ -17,7 +17,7 @@ class Dot(Ast):
     def execute(self, world: 'World') -> 'Ast':
         
         owner = self.owner.execute(world)
-        return owner.get(self.key)
+        return owner.get(self.key).execute(world)
 
     def get_vars(self) -> List['Var']:
         return self.owner.get_vars()

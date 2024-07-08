@@ -25,9 +25,8 @@ class World:
     def get_obj(self, name:str):
         return [x for x in self.objs if x.name == name][0]
     
-    def get_obj_ids(self):
-        from core.Id import Id
-        return [Id(x.name) for x in self.objs]
+    def get_objs(self):
+        return self.objs
 
     def tick(self):
 
@@ -38,6 +37,5 @@ class World:
         print(msg)
 
     def error(self, msg:str):
-        # print(msg) 
         raise Exception(msg)
 

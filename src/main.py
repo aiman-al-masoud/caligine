@@ -13,3 +13,8 @@ assert isinstance(ast, Ast)
 ast.execute(world)
 
 
+# xs = list(parser.parse('coincide(x, y)').find(world))
+# xs = [{k.name:v.name for k,v in x.items()} for x in xs]
+# print(xs)
+
+

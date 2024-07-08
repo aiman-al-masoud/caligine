@@ -25,7 +25,6 @@ squared(X) means X * X;
 
 coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
 
-assert not false;
 
 when is_down(keys.left_arrow) then trump.vel_x = -10;
 when is_up(keys.left_arrow) then trump.vel_x = 0;
@@ -37,8 +36,28 @@ assert squared(5) == 25;
 assert coincide(trump, burger);
 assert not coincide(trump, sombrero);
 assert trump.pos_x + 1 == 101;
+assert true;
+assert not false;
+assert 1 != 2;
 
 print "all right!";
+
+
+keyboard k1 {
+    control: "down"      
+};
+
+client c1 {
+    keyboard: k1
+};
+
+assert c1.keyboard.control == "down";
+c1.keyboard.control = "up";
+assert c1.keyboard.control == "up";
+
+
+
+
 
 
 

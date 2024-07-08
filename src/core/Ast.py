@@ -1,5 +1,5 @@
 from itertools import product
-from typing import TYPE_CHECKING, Dict, List, cast
+from typing import TYPE_CHECKING, Any, Dict, Generator, List
 
 if TYPE_CHECKING:
     from core.World import World
@@ -26,20 +26,22 @@ class Ast:
     def get_vars(self)->List['Var']:
         raise Exception()
 
-    def find(self, world:'World'): #-> List[Dict['Ast', 'Ast']]:
+    def find(self, world:'World') -> Generator[Dict['Ast', 'Ast'], Any, None]:
         
-        vars = cast(List[Ast], self.get_vars())
-        consts = cast(List[Ast],world.get_obj_ids())
+        vars = self.get_vars()
+        consts = world.get_objs()
         const_perms = product(consts, repeat=len(vars)) 
-        const_perms = set(const_perms)
-        assignments = [dict(zip(vars, p)) for p in const_perms]
-        # assignments_ok:List[Dict['Ast', 'Ast']] = []
+        assignments = (zip(vars, p) for p in const_perms)
 
         for a in assignments:
-            ast_concrete = self.subst(a)
+            
+            a = dict(a)
+
+            # no repeated individuals
+            if len({v.name for v in a.values()}) != len(a.values()):
+                continue
+
+            ast_concrete = self.subst(a) # pyright:ignore
             
             if ast_concrete.execute(world):
-                yield a
-                # assignments_ok.append(a)
-        
-        # return assignments_ok
+                yield a # pyright:ignore

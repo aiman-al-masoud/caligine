@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict
 from core.Ast import Ast
-
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict
 
 
 from typing import TYPE_CHECKING
@@ -23,4 +22,8 @@ class Object(Ast):
         return Object(self.name, self.type, {k:v.subst(d) for k,v in self.kwargs.items()})
 
     def get(self, key: str) -> 'Ast':
-        return self.kwargs[key]
+        from core.Bool import Bool
+        return self.kwargs.get(key, Bool(False))
+
+    def set(self, key: str, value: 'Ast'):
+        self.kwargs[key] = value

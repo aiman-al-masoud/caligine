@@ -14,5 +14,7 @@ class Bool(Const):
         match op:
             case 'and': return self and other
             case 'or': return self or other
+            case '==': return Bool(self == other)
+            case '!=': return Bool(self != other)
         
         raise Exception()

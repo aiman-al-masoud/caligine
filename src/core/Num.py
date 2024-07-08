@@ -10,7 +10,8 @@ class Num(Const):
 
         from core.Bool import Bool
 
-        assert isinstance(other, Num)
+        if not isinstance(other, Num):
+            return Bool(False)
 
         match op:
             case '+': return Num(self.value + other.value)
@@ -22,6 +23,7 @@ class Num(Const):
             case '>=': return Bool(self.value >= other.value)
             case '<=': return Bool(self.value <= other.value)
             case '==': return Bool(self.value == other.value)
+            case '!=': return Bool(self.value != other.value)
 
         raise Exception()
 

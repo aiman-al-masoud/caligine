@@ -1,13 +1,9 @@
 from dataclasses import dataclass
 from core.Ast import Ast
-
-
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from core.World import World
-
-from typing import TYPE_CHECKING, Dict, List
 
 
 @dataclass
@@ -15,8 +11,6 @@ class Rule(Ast):
     condition:Ast
     consequence:Ast
 
-
-    
     def execute(self, world: 'World') -> 'Ast':
 
         from core.Bool import Bool

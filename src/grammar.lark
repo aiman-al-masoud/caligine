@@ -1,6 +1,7 @@
 %import common.WS
 %import common.ESCAPED_STRING -> STRING
 %import common.NUMBER
+%import common.CNAME
 
 %ignore WS
 %ignore COMMENT
@@ -8,21 +9,18 @@
 ?start: statement
 ?statement: exp | (exp ";")+
 arg: exp | exp "," arg+ ","?
-kwarg: IDENTIFIER ":" exp | IDENTIFIER ":" exp "," kwarg+ ","?
+kwarg: CNAME ":" exp | CNAME ":" exp "," kwarg+ ","?
 ?exp: exp_rule
-
-
 ?exp_rule: exp_def | "when" exp "then" exp_def
 ?exp_def: exp_assert | exp_call "means" exp_assert
-
 ?exp_assert: exp_print | ASSERT exp_assert
 ?exp_print: exp_del | PRINT exp_print
 ?exp_del: exp_asgn | DELETE exp_del
-
 ?exp_asgn: exp_or | exp_dot "=" exp_or
 ?exp_or: exp_and | exp_and "or" exp_or+
 ?exp_and: exp_eq | exp_eq "and" exp_and+
-?exp_eq: exp_lt | exp_lt "==" exp_eq+
+?exp_eq: exp_neq | exp_neq "==" exp_eq+
+?exp_neq: exp_lt | exp_lt "!=" exp_neq+
 ?exp_lt: exp_gt | exp_gt "<" exp_lt+
 ?exp_gt: exp_lte | exp_lte ">" exp_gt+
 ?exp_lte: exp_gte | exp_gte "<=" exp_lte+
@@ -31,22 +29,16 @@ kwarg: IDENTIFIER ":" exp | IDENTIFIER ":" exp "," kwarg+ ","?
 ?exp_add: exp_div | exp_div "+" exp_add+
 ?exp_div: exp_mul | exp_mul "/" exp_div+
 ?exp_mul: exp_not | exp_not "*" exp_mul+
-
 ?exp_not: exp_min | NOT exp_not
-
 ?exp_min: exp_dot | MINUS exp_min
+?exp_dot: exp_call | exp_dot "." CNAME
+?exp_call: atom | CNAME "(" arg? ")"
+?atom: object | CNAME | NUMBER | STRING | "(" exp ")"
+?object: CNAME CNAME "{" kwarg? "}"
 
-?exp_dot: exp_call | exp_call "." IDENTIFIER
-?exp_call: atom | IDENTIFIER "(" arg? ")"
-?atom: object | constant | VARIABLE | NUMBER | STRING | "(" exp ")"
-?object: IDENTIFIER IDENTIFIER "{" kwarg? "}"
-
-constant: IDENTIFIER
 PRINT: "print"
 DELETE: "delete"
 NOT: "not"
 ASSERT: "assert"
 MINUS: "-"
-IDENTIFIER: /[a-z]([a-z]|[0-9]|_)*/
-VARIABLE: /[A-Z]([A-Z]|[0-9]|_)*/
 COMMENT: "#" /[^\n]/*

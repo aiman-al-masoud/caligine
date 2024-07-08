@@ -4,7 +4,6 @@ from core.Asgn import Asgn
 from core.Bool import Bool
 from core.Def import Def
 from core.FunCall import FunCall
-from core.Id import Id
 from core.Prog import Prog
 from core.Var import Var
 from core.Not import Not
@@ -42,20 +41,14 @@ class Parser:
 
 class ToAst(Transformer):
 
-    def IDENTIFIER(self, x):
-        return str(x)
+    def CNAME(self, x):
 
-    def constant(self, xs):
-
-        if xs[0]=='true':
+        if x == 'true':
             return Bool(True)
-        elif xs[0]=='false':
+        elif x == 'false':
             return Bool(False)
         else:
-            return Id(xs[0])
-
-    def VARIABLE(self, x):
-        return Var(str(x))
+            return Var(str(x))
 
     def NUMBER(self, x):
         return Num(float(x))
@@ -64,7 +57,10 @@ class ToAst(Transformer):
         return Str(str(x))
 
     def exp_call(self, xs):
-        return FunCall(xs[0], xs[1])
+
+        x0 = xs[0]
+        assert isinstance(x0, Var)
+        return FunCall(x0.name, xs[1])
 
     def exp_not(self, xs):
         return Not(xs[1])
@@ -102,11 +98,23 @@ class ToAst(Transformer):
     def exp_eq(self, xs):
         return BinOp('==', xs[0], xs[1])
 
+    def exp_neq(self, xs):
+        return BinOp('!=', xs[0], xs[1])
+
     def kwarg(self, xs):
-        return {xs[0]:xs[1], **( xs[2] if len(xs)==3 else  {}) }
+
+        x0 = xs[0]
+        assert isinstance(x0, Var)
+        return {x0.name:xs[1], **( xs[2] if len(xs)==3 else  {}) }
 
     def object(self, xs):
-        return Object(xs[1], xs[0], xs[2])
+
+        x0 = xs[0]
+        x1 = xs[1]
+        assert isinstance(x0, Var)
+        assert isinstance(x1, Var)
+        
+        return Object(x1.name, x0.name, xs[2] if len(xs) > 2 else {})
 
     def arg(self, xs):
 
@@ -128,7 +136,10 @@ class ToAst(Transformer):
         return Prog(xs)
 
     def exp_dot(self, xs):
-        return Dot(xs[0], xs[1])
+        
+        x1 = xs[1]
+        assert isinstance(x1, Var)
+        return Dot(xs[0], x1.name)
     
     def exp_asgn(self, xs):
 
