@@ -1,0 +1,45 @@
+
+sprite trump{
+    image: "./trump.png",
+    pos_x: 100,
+    pos_y: 200,
+};
+
+sprite burger{
+    image: "./burger.png",
+    pos_x: 100,
+    pos_y: 200,
+};
+
+sprite sombrero{
+    image: "./sombrero.png",
+    pos_x: 100,
+    pos_y: 300,
+};
+
+when trump.pos_x > 1 then kill(trump);
+
+
+squared(X) means X * X;
+
+
+coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
+
+assert not false;
+
+when is_down(keys.left_arrow) then trump.vel_x = -10;
+when is_up(keys.left_arrow) then trump.vel_x = 0;
+
+
+when trump.vel_x == 0 then print "trump stopped!";
+
+assert squared(5) == 25;
+assert coincide(trump, burger);
+assert not coincide(trump, sombrero);
+assert trump.pos_x + 1 == 101;
+
+print "all right!";
+
+
+
+
