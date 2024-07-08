@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    Hello!
+
+    <script>
+
+        window.onkeydown = e => {
+            postKeyEvent({ client_id: 'c1', key: e.key, state: 'down' })
+        }
+
+        window.onkeyup = e => {
+            postKeyEvent({ client_id: 'c1', key: e.key, state: 'up' })
+        }
+
+        async function postKeyEvent(e) {
+            return fetch('/api/input', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(e),
+            })
+        }
+    </script>
+</body>
+
+</html>

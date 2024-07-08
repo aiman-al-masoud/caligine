@@ -17,7 +17,7 @@ sprite sombrero{
     pos_y: 300,
 };
 
-when trump.pos_x > 1 then kill(trump);
+# when trump.pos_x > 1 then kill(trump);
 
 
 squared(X) means X * X;
@@ -26,8 +26,8 @@ squared(X) means X * X;
 coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
 
 
-when is_down(keys.left_arrow) then trump.vel_x = -10;
-when is_up(keys.left_arrow) then trump.vel_x = 0;
+# when is_down(keys.left_arrow) then trump.vel_x = -10;
+# when is_up(keys.left_arrow) then trump.vel_x = 0;
 
 
 when trump.vel_x == 0 then print "trump stopped!";

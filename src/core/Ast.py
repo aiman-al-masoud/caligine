@@ -15,7 +15,7 @@ class Ast:
         raise Exception()
 
     def set(self, key:str, value:'Ast'):
-        raise Exception()
+        raise Exception(self.__class__)
 
     def get(self, key:str)->'Ast':
         raise Exception()
@@ -27,7 +27,7 @@ class Ast:
         raise Exception()
 
     def find(self, world:'World') -> Generator[Dict['Ast', 'Ast'], Any, None]:
-        
+
         vars = self.get_vars()
         consts = world.get_objs()
         const_perms = product(consts, repeat=len(vars)) 
@@ -42,6 +42,9 @@ class Ast:
                 continue
 
             ast_concrete = self.subst(a) # pyright:ignore
-            
-            if ast_concrete.execute(world):
+
+            x = ast_concrete.execute(world)
+            if x:
+
                 yield a # pyright:ignore
+

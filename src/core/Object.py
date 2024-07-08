@@ -15,7 +15,10 @@ class Object(Ast):
     kwargs: Dict[str, Ast]
 
     def execute(self, world: 'World') -> 'Ast':
-        world.add_obj(self)
+
+        if not world.has_obj(self.name):
+            world.add_obj(self)
+            
         return self
 
     def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':

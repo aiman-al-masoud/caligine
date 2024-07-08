@@ -27,7 +27,7 @@ class FunCall(Ast):
             body = definition.body.subst(d)
             return body.execute(world)
         
-        raise Exception()
+        raise Exception(f'Function {self.fun_name} is not defined.')
 
     def get_vars(self) -> List['Var']:
         return [v for x in self.args for v in x.get_vars()]
