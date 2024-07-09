@@ -9,6 +9,9 @@ from core.Var import Var
 from core.Not import Not
 from core.BinOp import BinOp
 from core.Object import Object
+from core.Sprite import Sprite
+from core.Keyboard import Keyboard
+from core.Client import Client
 from core.Dot import Dot
 from core.Rule import Rule
 from core.Num import Num
@@ -54,7 +57,13 @@ class ToAst(Transformer):
         return Num(float(x))
 
     def STRING(self, x):
-        return Str(str(x))
+
+        # x = str(x)
+        # if 'png' in x or 'jpg' in x:
+        #     return Img(x)
+
+        x = str(x).strip('"')
+        return Str(x)
 
     def exp_call(self, xs):
 
@@ -113,8 +122,13 @@ class ToAst(Transformer):
         x1 = xs[1]
         assert isinstance(x0, Var)
         assert isinstance(x1, Var)
-        
-        return Object(x1.name, x0.name, xs[2] if len(xs) > 2 else {})
+        props = xs[2] if len(xs) > 2 else {}
+
+        match x0.name:
+            case 'sprite': return Sprite(x1.name, props)
+            case 'client': return Client(x1.name, props)
+            case 'keyboard': return Object(x1.name, props)
+
 
     def arg(self, xs):
 
@@ -148,7 +162,7 @@ class ToAst(Transformer):
         return Asgn(dot.owner, dot.key, xs[1])
 
     def exp_del(self, xs):
-        return Del(xs[0])
+        return Del(xs[1])
 
     def exp_print(self, xs):
         return Print(xs[1])

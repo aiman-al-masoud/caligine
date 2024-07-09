@@ -16,3 +16,6 @@ class Str(Const):
             case '!=': return Bool(self != other)
 
         raise Exception()
+    
+    # def __str__(self):
+    #     return self.value

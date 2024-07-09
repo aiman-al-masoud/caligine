@@ -1,6 +1,9 @@
 from itertools import product
 from typing import TYPE_CHECKING, Any, Dict, Generator, List
 
+
+from canvas import Canvas
+
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
@@ -26,9 +29,18 @@ class Ast:
     def get_vars(self)->List['Var']:
         raise Exception()
 
+    def draw(self, canvas:Canvas):
+        raise Exception()
+
+    def __int__(self)->int:
+        raise Exception()
+
     def find(self, world:'World') -> Generator[Dict['Ast', 'Ast'], Any, None]:
 
         vars = self.get_vars()
+        
+        vars = []  # TODO!!!!   PUT BACK prolog-like SYSTEM OF VARs VS IDs
+
         consts = world.get_objs()
         const_perms = product(consts, repeat=len(vars)) 
         assignments = (zip(vars, p) for p in const_perms)

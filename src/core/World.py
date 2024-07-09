@@ -1,12 +1,15 @@
 from dataclasses import dataclass, field
-from re import L
-from typing import List, Literal
+from threading import Thread
+from typing import TYPE_CHECKING, List
+from canvas import Canvas
 from core.Def import Def
 from core.Rule import Rule
 from core.Object import Object
 from queue import Queue
+from time import sleep
+if TYPE_CHECKING:
+    from core.KeyEvent import KeyEvent
 
-from core.Str import Str
 
 @dataclass
 class World:
@@ -58,13 +61,24 @@ class World:
 
         while not self.event_queue.empty():
             e = self.event_queue.get()
-            client = self.get_obj(e.client_id).execute(self)
-            client.get('keyboard').execute(self).set(e.key, Str(e.state))
+            e.execute(self)
 
+    def game_loop(self):
 
-@dataclass
-class KeyEvent:
-    client_id: str
-    key:str
-    state:Literal['up', 'down']
+        while True:
+
+            self.process_event_queue()
+            self.tick()            
+            sleep(0.1)
+
+    def start(self):
+        Thread(target=self.game_loop).start()
+
+    
+    def draw(self, canvas:Canvas, x_left:int, y_top:int, width:int, height:int):
+
+        objs = [o for o in self.objs if o.is_within_bounding_box(x_left, y_top, width, height)]
+
+        for o in objs:
+            o.draw(canvas)
 

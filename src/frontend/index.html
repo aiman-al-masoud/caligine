@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Game</title>
 </head>
 
 <body>
 
-    Hello!
+    <canvas id="canvas" width="500" height="500"></canvas>
 
     <script>
 
@@ -21,6 +21,17 @@
             postKeyEvent({ client_id: 'c1', key: e.key, state: 'up' })
         }
 
+        setInterval(async () => {
+
+            const res = await getImage('c1')
+            const { image_base64 } = await res.json()
+            const canvas = document.getElementById('canvas')
+            const ctx = canvas.getContext('2d')
+            const img = new Image()
+            img.src = image_base64
+            ctx.drawImage(img, 0, 0)
+        }, 100)
+
         async function postKeyEvent(e) {
             return fetch('/api/input', {
                 method: 'POST',
@@ -31,6 +42,18 @@
                 body: JSON.stringify(e),
             })
         }
+
+        async function getImage(client_id) {
+            return fetch('/api/output', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ client_id }),
+            })
+        }
+
     </script>
 </body>
 

@@ -1,23 +1,22 @@
 
 sprite trump{
-    image: "./trump.png",
+    image: "./trump-small.png",
     pos_x: 100,
     pos_y: 200,
 };
 
 sprite burger{
-    image: "./burger.png",
+    image: "./hamburger-small.png",
     pos_x: 100,
     pos_y: 200,
 };
 
 sprite sombrero{
-    image: "./sombrero.png",
+    image: "./sombrero-small.png",
     pos_x: 100,
     pos_y: 300,
 };
 
-# when trump.pos_x > 1 then kill(trump);
 
 
 squared(X) means X * X;
@@ -26,11 +25,10 @@ squared(X) means X * X;
 coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
 
 
+# when trump.pos_x > 1 then kill(trump);
 # when is_down(keys.left_arrow) then trump.vel_x = -10;
 # when is_up(keys.left_arrow) then trump.vel_x = 0;
-
-
-when trump.vel_x == 0 then print "trump stopped!";
+# when trump.vel_x == 0 then print "trump stopped!";
 
 assert squared(5) == 25;
 assert coincide(trump, burger);
@@ -42,13 +40,13 @@ assert 1 != 2;
 
 print "all right!";
 
-
 keyboard k1 {
     control: "down"      
 };
 
 client c1 {
-    keyboard: k1
+    keyboard: k1,
+    avatar: trump,
 };
 
 assert c1.keyboard.control == "down";
@@ -56,8 +54,12 @@ c1.keyboard.control = "up";
 assert c1.keyboard.control == "up";
 
 
+# delete sombrero;
 
+# when c1.keyboard.ArrowRight == "down" then delete sombrero;
 
+when c1.keyboard.ArrowRight == "down" then trump.pos_x = trump.pos_x + 10;
+when c1.keyboard.ArrowLeft == "down" then trump.pos_x = trump.pos_x - 10;
 
 
 

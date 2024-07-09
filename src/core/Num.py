@@ -26,6 +26,9 @@ class Num(Const):
             case '!=': return Bool(self.value != other.value)
 
         raise Exception()
+    
+    def __int__(self):
+        return int(self.value)
 
 
 
