@@ -1,6 +1,7 @@
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
+from core.Keyboard import Keyboard
 from core.Object import Object
 from canvas import Canvas
 from core.Sprite import Sprite
@@ -12,6 +13,9 @@ if TYPE_CHECKING:
 
 @dataclass
 class Client(Object):
+
+    def __post_init__(self):
+        self.set('keyboard', Keyboard('keyboard', {}))
     
     def look_at_world(self, world:'World', canvas:'Canvas'):
         

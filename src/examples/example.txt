@@ -18,12 +18,8 @@ sprite sombrero{
 };
 
 
-
 squared(X) means X * X;
-
-
 coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
-
 
 # when trump.pos_x > 1 then kill(trump);
 # when is_down(keys.left_arrow) then trump.vel_x = -10;
@@ -40,27 +36,18 @@ assert 1 != 2;
 
 print "all right!";
 
-keyboard k1 {
-    control: "down"      
-};
-
 client c1 {
-    keyboard: k1,
-    avatar: trump,
+    avatar: trump
 };
 
+c1.keyboard.control = "down";
 assert c1.keyboard.control == "down";
 c1.keyboard.control = "up";
 assert c1.keyboard.control == "up";
 
-
 # delete sombrero;
-
 # when c1.keyboard.ArrowRight == "down" then delete sombrero;
 
-when c1.keyboard.ArrowRight == "down" then trump.pos_x = trump.pos_x + 10;
-when c1.keyboard.ArrowLeft == "down" then trump.pos_x = trump.pos_x - 10;
-
-
-
+when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = trump.pos_x + 10;
+when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = trump.pos_x - 10;
 
