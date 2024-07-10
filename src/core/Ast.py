@@ -2,7 +2,6 @@ from itertools import product
 from typing import TYPE_CHECKING, Any, Dict, Generator, List
 
 
-from canvas import Canvas
 
 if TYPE_CHECKING:
     from core.World import World
@@ -29,8 +28,8 @@ class Ast:
     def get_vars(self)->List['Var']:
         raise Exception()
 
-    def draw(self, canvas:Canvas):
-        raise Exception()
+    # def draw(self, canvas:Canvas):
+    #     raise Exception()
 
     def __int__(self)->int:
         raise Exception()

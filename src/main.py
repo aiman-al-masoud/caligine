@@ -1,6 +1,5 @@
 #!/bin/python
 import sys
-from canvas import Canvas
 from core.Ast import Ast
 from parse import Parser
 from core.World import World

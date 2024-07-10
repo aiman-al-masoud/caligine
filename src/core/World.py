@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
 from threading import Thread
 from typing import TYPE_CHECKING, List
-from canvas import Canvas
+
+from flask.app import cli
+from core.Sprite import Sprite
 from core.Client import Client
 from core.Def import Def
 from core.Rule import Rule
@@ -77,11 +79,20 @@ class World:
 
     def get_clients(self):
         return [o for o in self.objs if isinstance(o, Client)]
+    
+    def get_client(self, name:str):
+        
+        clients = self.get_clients()
+        client = [c for c in clients if c.name == name][0]
+        return client
 
-    def draw(self, canvas:Canvas, center_x:int, center_y:int):
+    def get_sprites(self):
+        return [o for o in self.objs if isinstance(o, Sprite)]
 
-        canvas.set_center(center_x, center_y)
+    # def draw(self, canvas:Canvas, center_x:int, center_y:int):
 
-        for o in self.objs:
-            o.draw(canvas)
+    #     canvas.set_center(center_x, center_y)
+
+    #     for o in self.objs:
+    #         o.draw(canvas)
 

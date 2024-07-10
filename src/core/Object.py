@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Dict
-from canvas import Canvas
 from core.Ast import Ast
 from typing import TYPE_CHECKING, Dict
 from typing import TYPE_CHECKING
@@ -30,5 +29,4 @@ class Object(Ast):
     def set(self, key: str, value: 'Ast'):
         self.props[key] = value
     
-    def draw(self, canvas: Canvas):
-        pass
+
