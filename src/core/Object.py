@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict
+from canvas import Canvas
 from core.Ast import Ast
 from typing import TYPE_CHECKING, Dict
-from canvas import Canvas
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -29,31 +29,6 @@ class Object(Ast):
 
     def set(self, key: str, value: 'Ast'):
         self.props[key] = value
-
-    def is_drawable(self):
-        return 'image' in self.props
-
+    
     def draw(self, canvas: Canvas):
-
-        if not self.is_drawable():
-            return
-
-        path = str(self.get('image'))
-        x = int(self.get('pos_x'))
-        y = int(self.get('pos_y'))
-
-        canvas.draw_image(path, int(x), int(y))
-
-    def is_within_bounding_box(self, x_left:int, y_top:int, width:int, height:int):
-
-        if not self.is_drawable():
-            return False
-
-        x_right = x_left + width
-        y_bottom = y_top + height
-
-        x = int(self.get('pos_x'))
-        y = int(self.get('pos_y'))
-
-        return x_left < x < x_right and y_top < y < y_bottom
-
+        pass
