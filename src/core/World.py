@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from threading import Thread
-from typing import TYPE_CHECKING, List
-
-from flask.app import cli
+from typing import TYPE_CHECKING, List, Tuple
 from core.Sprite import Sprite
 from core.Client import Client
 from core.Def import Def
@@ -20,6 +18,8 @@ class World:
     defs:List['Def']
     rules:List['Rule']
     event_queue:Queue['KeyEvent'] = field(default_factory=lambda: Queue())
+    canvas_size: Tuple[int, int] = (300, 300)
+    canvas_bg_color:str = 'white'
 
     def add_def(self, d:Def):
         self.defs.append(d)
@@ -89,10 +89,17 @@ class World:
     def get_sprites(self):
         return [o for o in self.objs if isinstance(o, Sprite)]
 
-    # def draw(self, canvas:Canvas, center_x:int, center_y:int):
-
-    #     canvas.set_center(center_x, center_y)
-
-    #     for o in self.objs:
-    #         o.draw(canvas)
-
+    def set_canvas_size(self, w:int,h:int):
+        self.canvas_size = (w, h)
+    
+    def get_canvas_width(self):
+        return self.canvas_size[0]
+    
+    def get_canvas_height(self):
+        return self.canvas_size[1]
+    
+    def set_canvas_bg_color(self, canvas_bg_color):
+        self.canvas_bg_color = canvas_bg_color
+    
+    def get_canvas_bg_color(self):
+        return self.canvas_bg_color

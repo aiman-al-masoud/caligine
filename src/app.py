@@ -57,26 +57,14 @@ def send_updated_sprites(client_id:str, include_image:bool=False):
     world = app.config['world']
     assert isinstance(world, World)
     client = world.get_client(client_id)
-    center_x, center_y = client.center_coords(world)
-    canvas_width = 300
-    canvas_height = 300
-    canvas_bg_color = 'red'
-
-    sprites = world.get_sprites()
-    sprites_data = [s.to_json(
-        include_image=include_image,
-        center_x = center_x,
-        center_y = center_y,
-        canvas_width = canvas_width,
-        canvas_height = canvas_height,
-        ) for s in sprites]
+    sprites_data = client.get_sprite_data_from_own_perspective(world, include_image)
 
     response = {
         'sprites': sprites_data, 
         'client_id': client_id,  
-        'canvas_width': canvas_width, 
-        'canvas_height': canvas_height, 
-        'canvas_bg_color': canvas_bg_color,
+        'canvas_width': world.get_canvas_width(), 
+        'canvas_height': world.get_canvas_height(), 
+        'canvas_bg_color': world.get_canvas_bg_color(),
     }
     
     socketio.emit('update-sprites', json.dumps(response))

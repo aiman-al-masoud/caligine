@@ -14,18 +14,13 @@ socket.on('connect', function () {
 socket.on('update-sprites', function (data) {
 
     const { sprites, client_id, canvas_width, canvas_height, canvas_bg_color} = JSON.parse(data)
-
     
     if (client_id !== my_client_id) return
 
     canvas.setWidth(canvas_width)
     canvas.setHeght(canvas_height)
     canvas.setBgColor(canvas_bg_color)
-    
-    //@ts-ignore
-    sprites.forEach(s=>{
-        canvas.drawSprite(s)
-    })
+    canvas.reDrawAll(sprites)
 })
 
 
