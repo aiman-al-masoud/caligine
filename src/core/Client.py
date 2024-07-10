@@ -21,8 +21,4 @@ class Client(Object):
         center_x = int(avatar.get('pos_x'))
         center_y = int(avatar.get('pos_y'))
 
-        WINDOW_SIZE = 400
-        left_x = center_x - WINDOW_SIZE//2
-        top_y = center_y - WINDOW_SIZE//2
-
-        world.draw(canvas, left_x, top_y, WINDOW_SIZE, WINDOW_SIZE) 
+        world.draw(canvas, center_x, center_y)

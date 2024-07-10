@@ -78,11 +78,10 @@ class World:
     def get_clients(self):
         return [o for o in self.objs if isinstance(o, Client)]
 
-    
-    def draw(self, canvas:Canvas, x_left:int, y_top:int, width:int, height:int):
+    def draw(self, canvas:Canvas, center_x:int, center_y:int):
 
-        objs = [o for o in self.objs if o.is_within_bounding_box(x_left, y_top, width, height)]
+        canvas.set_center(center_x, center_y)
 
-        for o in objs:
+        for o in self.objs:
             o.draw(canvas)
 

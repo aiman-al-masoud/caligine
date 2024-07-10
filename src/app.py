@@ -44,7 +44,7 @@ def update_screen_loop(world:World):
 
         for client in world.get_clients():
 
-            canvas = Canvas(500, 500, 'white')
+            canvas = Canvas(500, 500, 'blue')
             client.look_at_world(world, canvas)
             image = canvas.get_rendered()
             buffered = BytesIO()

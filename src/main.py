@@ -15,7 +15,6 @@ assert isinstance(ast, Ast)
 ast.execute(world)
 
 
-canvas = Canvas(500, 500, 'white')
 world.start()
 app.config['world'] = world
 
