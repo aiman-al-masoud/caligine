@@ -10,10 +10,9 @@ class Canvas:
     def draw_image(self, image_path:str, x:int, y:int):
 
         if image_path not in self.cache:
-            self.cache[image_path] =  Image.open(image_path)
+            self.cache[image_path] = Image.open(image_path)
 
         image = self.cache[image_path]
-
         self.rendered.paste(image, (x, y), image)
     
     def get_rendered(self):

@@ -17,5 +17,5 @@ class Str(Const):
 
         raise Exception()
     
-    # def __str__(self):
-    #     return self.value
+    def __str__(self):
+        return self.value

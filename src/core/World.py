@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from threading import Thread
 from typing import TYPE_CHECKING, List
 from canvas import Canvas
+from core.Client import Client
 from core.Def import Def
 from core.Rule import Rule
 from core.Object import Object
@@ -73,6 +74,9 @@ class World:
 
     def start(self):
         Thread(target=self.game_loop).start()
+
+    def get_clients(self):
+        return [o for o in self.objs if isinstance(o, Client)]
 
     
     def draw(self, canvas:Canvas, x_left:int, y_top:int, width:int, height:int):

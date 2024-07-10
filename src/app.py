@@ -1,49 +1,61 @@
 import os
-from flask import Flask, json, request
+from threading import Thread
+from flask import Flask
 from canvas import Canvas
-from core.Client import Client
 from core.KeyEvent import KeyEvent
 from io import BytesIO
 import base64
-
+from flask import Flask
+from flask_socketio import SocketIO
+from time import sleep
 import logging
+from core.World import World
+
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'buruf'
+socketio = SocketIO(app)
+
 
 @app.route('/', methods=['GET'])
 def index():
     path_index = os.path.split(os.path.abspath(__file__))[0]+'/frontend/index.html'
     return open(path_index).read()
 
-@app.route('/api/input', methods=['GET', 'POST'])
-def get_input():
+@socketio.on('message')
+def handle_message(data):
+    print(f'received message: {data}')
 
-    payload = request.json
-    if not payload: return 'missing json', 400    
-    client_id = payload['client_id']
-    key = payload['key']
-    state = payload['state']
+@socketio.on('keyevent')
+def handle_keyevent(data):
+
+    client_id = data['client_id']
+    key = data['key']
+    state = data['state']
     e = KeyEvent(client_id, key, state)
     app.config['world'].put_event(e)
-    return 'ok'
 
-@app.route('/api/output', methods=['GET', 'POST'])
-def send_output():
 
-    payload = request.json
-    if not payload: return 'missing json', 400    
-    client_id = payload['client_id']
-    client = app.config['world'].get_obj(client_id)
-    assert isinstance(client, Client)
-    canvas = Canvas(500, 500, 'white')
-    client.look_at_world(app.config['world'], canvas)
-    image = canvas.get_rendered()
-    buffered = BytesIO()
-    image.save(buffered, format="JPEG")
-    out = base64.b64encode(buffered.getvalue()).decode('utf-8')
+def update_screen_loop(world:World):
 
-    return json.dumps({
-        'image_base64': 'data:image/png;base64,'+out
-    })
+    while True:
+
+        for client in world.get_clients():
+
+            canvas = Canvas(500, 500, 'white')
+            client.look_at_world(world, canvas)
+            image = canvas.get_rendered()
+            buffered = BytesIO()
+            image.save(buffered, format="png")
+            out = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            out = 'data:image/png;base64,' + out
+            socketio.emit('screen-update', {'client_id': client.name, 'image_base64' : out})
+
+        sleep(0.1)
+
+def start_update_screen(world:World):
+
+    Thread(target=update_screen_loop, args=[world]).start()
+

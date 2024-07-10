@@ -4,10 +4,7 @@ from core.Ast import Ast
 from typing import TYPE_CHECKING, Dict
 from canvas import Canvas
 from typing import TYPE_CHECKING
-from core.Num import Num
 
-
-from core.Str import Str
 if TYPE_CHECKING:
     from core.World import World
 
@@ -41,20 +38,16 @@ class Object(Ast):
         if not self.is_drawable():
             return
 
-        path = self.get('image')
-        x = self.get('pos_x')
-        y = self.get('pos_y')
+        path = str(self.get('image'))
+        x = int(self.get('pos_x'))
+        y = int(self.get('pos_y'))
 
-        assert isinstance(path, Str)
-        assert isinstance(x, Num)
-        assert isinstance(y, Num)
-
-        canvas.draw_image(path.value, int(x), int(y))
+        canvas.draw_image(path, int(x), int(y))
 
     def is_within_bounding_box(self, x_left:int, y_top:int, width:int, height:int):
 
         if not self.is_drawable():
-            return
+            return False
 
         x_right = x_left + width
         y_bottom = y_top + height
