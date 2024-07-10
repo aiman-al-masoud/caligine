@@ -14,6 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>    
     <script>
 
+        const my_client_id = prompt('Insert your client ID:')
+        
         const socket = io();
 
         socket.on('connect', function(){
@@ -24,7 +26,7 @@
 
             const { image_base64, client_id } = data
             
-            if (client_id!=='c1') return
+            if (client_id!==my_client_id) return
 
             const canvas = document.getElementById('canvas')
             const ctx = canvas.getContext('2d')
@@ -34,54 +36,12 @@
         })
 
         window.onkeydown = e => {
-            socket.emit('keyevent', {client_id: 'c1', key: e.key,  state: 'down'})
+            socket.emit('keyevent', {client_id: my_client_id, key: e.key,  state: 'down'})
         }
 
         window.onkeyup = e => {
-            socket.emit('keyevent', {client_id: 'c1', key: e.key, state: 'up'})
+            socket.emit('keyevent', {client_id: my_client_id, key: e.key, state: 'up'})
         }
-
-
-        // window.onkeydown = e => {
-        //     postKeyEvent({ client_id: 'c1', key: e.key, state: 'down' })
-        // }
-
-        // window.onkeyup = e => {
-        //     postKeyEvent({ client_id: 'c1', key: e.key, state: 'up' })
-        // }
-
-        // setInterval(async () => {
-
-        //     const res = await getImage('c1')
-        //     const { image_base64 } = await res.json()
-        //     const canvas = document.getElementById('canvas')
-        //     const ctx = canvas.getContext('2d')
-        //     const img = new Image()
-        //     img.src = image_base64
-        //     ctx.drawImage(img, 0, 0)
-        // }, 100)
-
-        // async function postKeyEvent(e) {
-        //     return fetch('/api/input', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(e),
-        //     })
-        // }
-
-        // async function getImage(client_id) {
-        //     return fetch('/api/output', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ client_id }),
-        //     })
-        // }
 
     </script>
 </body>

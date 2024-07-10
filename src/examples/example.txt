@@ -40,6 +40,10 @@ client c1 {
     avatar: trump
 };
 
+client c2 {
+    avatar: burger
+};
+
 c1.keyboard.control = "down";
 assert c1.keyboard.control == "down";
 c1.keyboard.control = "up";
@@ -48,6 +52,12 @@ assert c1.keyboard.control == "up";
 # delete sombrero;
 # when c1.keyboard.ArrowRight == "down" then delete sombrero;
 
-when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = trump.pos_x + 10;
-when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = trump.pos_x - 10;
+when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = c1.avatar.pos_x + 10;
+when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = c1.avatar.pos_x - 10;
+
+
+when c2.keyboard.ArrowRight == "down" then c2.avatar.pos_x = c2.avatar.pos_x + 10;
+when c2.keyboard.ArrowLeft == "down" then c2.avatar.pos_x = c2.avatar.pos_x - 10;
+
+
 
