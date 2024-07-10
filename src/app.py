@@ -42,7 +42,7 @@ def update_screen_loop(world:World):
 
         for client in world.get_clients():
 
-            canvas = Canvas(500, 500, 'blue')
+            canvas = Canvas(300, 300, 'rgb(0, 100, 100)')
             client.look_at_world(world, canvas)
             out = canvas.get_base64()
             socketio.emit('screen-update', {'client_id': client.name, 'image_base64' : out})
