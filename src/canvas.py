@@ -1,3 +1,5 @@
+import base64
+from io import BytesIO
 from PIL import Image
 
 class Canvas:
@@ -27,5 +29,13 @@ class Canvas:
     def get_rendered(self):
 
         return self.rendered
+
+    def get_base64(self):
+
+        buffered = BytesIO()
+        self.rendered.save(buffered, format="png", optimize=True, quality=10)
+        out = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        out = 'data:image/png;base64,' + out
+        return out
 
 

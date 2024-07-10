@@ -3,8 +3,6 @@ from threading import Thread
 from flask import Flask
 from canvas import Canvas
 from core.KeyEvent import KeyEvent
-from io import BytesIO
-import base64
 from flask import Flask
 from flask_socketio import SocketIO
 from time import sleep
@@ -46,11 +44,7 @@ def update_screen_loop(world:World):
 
             canvas = Canvas(500, 500, 'blue')
             client.look_at_world(world, canvas)
-            image = canvas.get_rendered()
-            buffered = BytesIO()
-            image.save(buffered, format="png")
-            out = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            out = 'data:image/png;base64,' + out
+            out = canvas.get_base64()
             socketio.emit('screen-update', {'client_id': client.name, 'image_base64' : out})
 
         sleep(0.1)
