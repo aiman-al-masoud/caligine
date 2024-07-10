@@ -5,16 +5,22 @@ sprite trump{
     pos_y: 200,
 };
 
-sprite burger{
-    image: "./hamburger-small.png",
-    pos_x: 100,
-    pos_y: 200,
-};
+# sprite burger{
+#     image: "./hamburger-small.png",
+#     pos_x: 100,
+#     pos_y: 200,
+# };
 
 sprite sombrero{
     image: "./sombrero-small.png",
     pos_x: 100,
     pos_y: 300,
+};
+
+sprite biden{
+    image: "./biden-small.png",
+    pos_x: 300,
+    pos_y: 200,
 };
 
 
@@ -27,7 +33,7 @@ coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
 # when trump.vel_x == 0 then print "trump stopped!";
 
 assert squared(5) == 25;
-assert coincide(trump, burger);
+# assert coincide(trump, burger);
 assert not coincide(trump, sombrero);
 assert trump.pos_x + 1 == 101;
 assert true;
@@ -41,7 +47,7 @@ client c1 {
 };
 
 client c2 {
-    avatar: burger
+    avatar: biden
 };
 
 c1.keyboard.control = "down";
