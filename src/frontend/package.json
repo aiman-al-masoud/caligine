@@ -1,0 +1,17 @@
+{
+  "name": "frontend",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "build": "./build.sh"
+  },
+  "type": "module",
+  "dependencies": {
+    "socket.io-client": "^4.7.5"
+  }
+}
