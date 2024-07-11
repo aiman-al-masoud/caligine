@@ -73,3 +73,5 @@ when c2.keyboard.ArrowLeft == "down" then c2.avatar.pos_x = c2.avatar.pos_x - 10
 # when true then trump.pos_x = trump.pos_x - 1;
 
 
+foo(X) means  X.pos_y == 300;
+

@@ -4,13 +4,13 @@ from core.Asgn import Asgn
 from core.Bool import Bool
 from core.Def import Def
 from core.FunCall import FunCall
+from core.Id import Id
 from core.Prog import Prog
 from core.Var import Var
 from core.Not import Not
 from core.BinOp import BinOp
 from core.Object import Object
 from core.Sprite import Sprite
-from core.Keyboard import Keyboard
 from core.Client import Client
 from core.Dot import Dot
 from core.Rule import Rule
@@ -46,12 +46,16 @@ class ToAst(Transformer):
 
     def CNAME(self, x):
 
+        x = str(x)
+
         if x == 'true':
             return Bool(True)
         elif x == 'false':
             return Bool(False)
+        elif x.isupper():
+            return Var(x)
         else:
-            return Var(str(x))
+            return Id(x)
 
     def NUMBER(self, x):
         return Num(float(x))
@@ -68,7 +72,7 @@ class ToAst(Transformer):
     def exp_call(self, xs):
 
         x0 = xs[0]
-        assert isinstance(x0, Var)
+        assert isinstance(x0, Id)
         return FunCall(x0.name, xs[1])
 
     def exp_not(self, xs):
@@ -113,15 +117,15 @@ class ToAst(Transformer):
     def kwarg(self, xs):
 
         x0 = xs[0]
-        assert isinstance(x0, Var)
+        assert isinstance(x0, Id)
         return {x0.name:xs[1], **( xs[2] if len(xs)==3 else  {}) }
 
     def object(self, xs):
 
         x0 = xs[0]
         x1 = xs[1]
-        assert isinstance(x0, Var)
-        assert isinstance(x1, Var)
+        assert isinstance(x0, Id)
+        assert isinstance(x1, Id)
         props = xs[2] if len(xs) > 2 else {}
 
         match x0.name:
@@ -152,7 +156,7 @@ class ToAst(Transformer):
     def exp_dot(self, xs):
         
         x1 = xs[1]
-        assert isinstance(x1, Var)
+        assert isinstance(x1, Id)
         return Dot(xs[0], x1.name)
     
     def exp_asgn(self, xs):

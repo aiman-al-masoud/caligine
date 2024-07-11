@@ -13,6 +13,8 @@ ast = parser.parse(text)
 assert isinstance(ast, Ast)
 ast.execute(world)
 
+# xs = parser.parse('foo(X)').find(world)
+# print(list(xs))
 
 world.start()
 app.config['world'] = world
