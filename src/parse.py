@@ -112,11 +112,14 @@ class ToAst(Transformer):
     def exp_neq(self, xs):
         return BinOp('!=', xs[0], xs[1])
 
-    def kwarg(self, xs):
+    def kwarg(self, pairs):
+        return { p[0] :p[1] for p in pairs}
+
+    def pair(self, xs):
 
         x0 = xs[0]
         assert isinstance(x0, Id)
-        return {Str(x0.name) :xs[1], **( xs[2] if len(xs)==3 else  {}) }
+        return [Str(x0.name), xs[1]]
 
     def object(self, xs):
 

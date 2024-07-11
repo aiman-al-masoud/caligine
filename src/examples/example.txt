@@ -3,6 +3,8 @@ create sprite trump{
     image: "./trump-small.png",
     pos_x: 100,
     pos_y: 200,
+    repeat_x: 3,
+    repeat_y: 2
 };
 
 # sprite burger{
@@ -14,13 +16,13 @@ create sprite trump{
 create sprite sombrero{
     image: "./sombrero-small.png",
     pos_x: 100,
-    pos_y: 300,
+    pos_y: 300
 };
 
 create sprite biden{
     image: "./biden-small.png",
     pos_x: 300,
-    pos_y: 200,
+    pos_y: 200
 };
 
 

@@ -30,3 +30,8 @@ class Object(Ast):
 
         key = key if isinstance(key, Ast) else Str(key)
         self.props[key] = value
+    
+    def has(self, key:'str|Ast'):
+
+        key = key if isinstance(key, Ast) else Str(key)
+        return key in self.props

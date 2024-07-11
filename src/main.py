@@ -1,11 +1,9 @@
 #!/bin/python
 import sys
 from core.Ast import Ast
-from core.Num import Num
 from parse import Parser
 from core.World import World
 from app import app, start_update_screen
-from core.Sequence import Sequence
 
 parser = Parser()
 world = World([], [], [])
@@ -14,10 +12,6 @@ ast = parser.parse(text)
 
 assert isinstance(ast, Ast)
 ast.execute(world)
-
-# xs = parser.parse('foo(X)').find(world)
-# print(list(xs))
-
 
 world.start()
 app.config['world'] = world
