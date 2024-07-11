@@ -2,16 +2,16 @@
 create sprite trump{
     image: "./trump-small.png",
     pos_x: 100,
-    pos_y: 200,
-    repeat_x: 3,
-    repeat_y: 2
+    pos_y: 200
 };
 
-# sprite burger{
-#     image: "./hamburger-small.png",
-#     pos_x: 100,
-#     pos_y: 200,
-# };
+create sprite wall1{
+    image: "./brick-small.png",
+    pos_x: 100,
+    pos_y: 200,
+    repeat_cols: 10,
+    repeat_rows: 2
+};
 
 create sprite sombrero{
     image: "./sombrero-small.png",

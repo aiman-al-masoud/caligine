@@ -1,4 +1,5 @@
 #!/bin/python
+import os
 import sys
 from core.Ast import Ast
 from parse import Parser
@@ -7,7 +8,10 @@ from app import app, start_update_screen
 
 parser = Parser()
 world = World([], [], [])
-text = open(sys.argv[1]).read()
+
+path_script = os.path.abspath(sys.argv[1]) 
+world.set_path_script(path_script)
+text = open(path_script).read()
 ast = parser.parse(text)
 
 assert isinstance(ast, Ast)

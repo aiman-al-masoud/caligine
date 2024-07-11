@@ -20,6 +20,7 @@ class World:
     event_queue: Queue['KeyEvent'] = field(default_factory=lambda: Queue())
     canvas_size: Tuple[int, int] = (400, 400)
     canvas_bg_color: str = 'rgb(100, 100, 100)'
+    path_script:str = ''
 
     def add_def(self, d: Def):
         self.defs.append(d)
@@ -103,3 +104,10 @@ class World:
 
     def get_canvas_bg_color(self):
         return self.canvas_bg_color
+
+    def set_path_script(self, path_script:str):
+        self.path_script = path_script
+
+    def get_path_script(self):
+        return self.path_script
+        

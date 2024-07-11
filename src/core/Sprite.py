@@ -1,6 +1,7 @@
 import base64
 from dataclasses import dataclass
 from io import BytesIO
+import os
 from typing import TYPE_CHECKING, Optional, TypedDict
 from PIL import Image
 from core.Object import Object
@@ -24,14 +25,14 @@ class Sprite(Object):
         if not self.has('image'):
             raise Exception()
 
-        if not self.has('repeat_x'):
-            self.set('repeat_x', Num(1))
+        if not self.has('repeat_cols'):
+            self.set('repeat_cols', Num(1))
 
-        if not self.has('repeat_y'):
-            self.set('repeat_y', Num(1))
+        if not self.has('repeat_rows'):
+            self.set('repeat_rows', Num(1))
 
-        self.image = Image.open(str(self.get('image')))
-        
+        self.load_image(world)
+
         return self
 
     def to_json(self,  include_image:bool=False, offset_x:int=0, offset_y:int=0)->'SpriteJson':
@@ -39,15 +40,15 @@ class Sprite(Object):
         x = int(self.get('pos_x')) - offset_x
         y = int(self.get('pos_y')) - offset_y
 
-        repeat_x = int(self.get('repeat_x'))
-        repeat_y = int(self.get('repeat_y'))
+        repeat_cols = int(self.get('repeat_cols'))
+        repeat_rows = int(self.get('repeat_rows'))
 
         return {
             'name': self.name,
             'x': x,
             'y': y,
-            'repeat_x': repeat_x,
-            'repeat_y': repeat_y,
+            'repeat_cols': repeat_cols,
+            'repeat_rows': repeat_rows,
             'image_base64': self.image_base64() if include_image else None
         }
 
@@ -62,18 +63,27 @@ class Sprite(Object):
     def get(self, key: 'str|Ast', default: 'Ast|None' = None) -> 'Ast':
         
         if str(key) == 'width':
-            return Num(self.image.width * int(self.get('repeat_y')))
+            return Num(self.image.width * int(self.get('repeat_rows')))
 
         if str(key) == 'height':
-            return Num(self.image.height * int(self.get('repeat_x')))
+            return Num(self.image.height * int(self.get('repeat_cols')))
 
         return super().get(key, default)
+    
+    def load_image(self, world:'World'):
+
+        path_script = world.path_script
+        path_img_rel = str(self.get('image'))
+        path_folder = os.path.split(path_script)[0]
+        path_img_abs = os.path.join(path_folder, path_img_rel)
+        path_img_abs = os.path.abspath(path_img_abs)
+        self.image = Image.open(path_img_abs)
 
 
 class SpriteJson(TypedDict):
     name:str
     x:int
     y:int
-    repeat_x:int
-    repeat_y:int
+    repeat_cols:int
+    repeat_rows:int
     image_base64:Optional[str]

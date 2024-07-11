@@ -51,8 +51,8 @@ export class Canvas {
 
         let pos = { x: s.x, y: s.y }
 
-        for (let i = 0; i < s.repeat_x; i++) {
-            for (let j = 0; j < s.repeat_y; j++) {
+        for (let i = 0; i < s.repeat_rows; i++) {
+            for (let j = 0; j < s.repeat_cols; j++) {
                 this.ctx.drawImage(image, pos.x, pos.y)
                 pos.x += image.width
             }
