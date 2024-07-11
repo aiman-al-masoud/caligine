@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
 
-@dataclass
+@dataclass(frozen=True)
 class Const(Ast):
     
     def execute(self, world: 'World') -> 'Ast':
@@ -15,6 +15,6 @@ class Const(Ast):
 
     def get_vars(self) -> List['Var']:
         return []
-    
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
+
+    def subst(self, dictionary: 'Ast') -> 'Ast':
         return self

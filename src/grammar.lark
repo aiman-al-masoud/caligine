@@ -12,10 +12,15 @@ arg: exp | exp "," arg+ ","?
 kwarg: CNAME ":" exp | CNAME ":" exp "," kwarg+ ","?
 ?exp: exp_rule
 ?exp_rule: exp_def | "when" exp "then" exp_def
-?exp_def: exp_assert | exp_call "means" exp_assert
-?exp_assert: exp_print | ASSERT exp_assert
-?exp_print: exp_del | PRINT exp_print
-?exp_del: exp_asgn | DELETE exp_del
+?exp_def: exp_print | exp_call "means" exp_find
+?exp_print: exp_assert | PRINT exp_print
+?exp_assert: exp_del | ASSERT exp_assert
+?exp_del: exp_find | DELETE exp_del
+?exp_find: exp_create | FIND exp_find
+
+?exp_create: exp_asgn | CREATE exp_create
+
+
 ?exp_asgn: exp_or | exp_dot "=" exp_or
 ?exp_or: exp_and | exp_and "or" exp_or+
 ?exp_and: exp_eq | exp_eq "and" exp_and+
@@ -33,11 +38,14 @@ kwarg: CNAME ":" exp | CNAME ":" exp "," kwarg+ ","?
 ?exp_min: exp_dot | MINUS exp_min
 ?exp_dot: exp_call | exp_dot "." CNAME
 ?exp_call: atom | CNAME "(" arg? ")"
-?atom: object | CNAME | NUMBER | STRING | "(" exp ")"
+?atom: object | sequence | CNAME | NUMBER | STRING | "(" exp ")"
 ?object: CNAME CNAME "{" kwarg? "}"
+sequence: "[" arg? "]" 
 
 PRINT: "print"
+CREATE: "create"
 DELETE: "delete"
+FIND: "find"
 NOT: "not"
 ASSERT: "assert"
 MINUS: "-"

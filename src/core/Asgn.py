@@ -23,5 +23,5 @@ class Asgn(Ast):
     def get_vars(self) -> List['Var']:
         return self.owner.get_vars()+self.value.get_vars()
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return Asgn(self.owner.subst(d), self.key, self.value.subst(d))
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return Asgn(self.owner.subst(dictionary), self.key, self.value.subst(dictionary))

@@ -3,6 +3,8 @@ from typing import Dict
 from core.Ast import Ast
 from typing import TYPE_CHECKING, Dict
 from typing import TYPE_CHECKING
+from core.Str import Str
+from core.Bool import Bool
 
 if TYPE_CHECKING:
     from core.World import World
@@ -10,23 +12,21 @@ if TYPE_CHECKING:
 @dataclass
 class Object(Ast):
     name:str
-    props: Dict[str, Ast]
+    props: Dict[Ast, Ast]
 
     def execute(self, world: 'World') -> 'Ast':
-
-        if not world.has_obj(self.name):
-            world.add_obj(self)
-            
         return self
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return Object(self.name, {k:v.subst(d) for k,v in self.props.items()})
+    def subst(self, dictionary: 'Ast') -> 'Ast':
 
-    def get(self, key: str) -> 'Ast':
-        from core.Bool import Bool
-        return self.props.get(key, Bool(False))
+        return Object(self.name, {k:v.subst(dictionary) for k,v in self.props.items()})
 
-    def set(self, key: str, value: 'Ast'):
+    def get(self, key: 'str|Ast', default:'Ast|None'=None) -> 'Ast':
+
+        key = key if isinstance(key, Ast) else Str(key)
+        return self.props.get(key, default if default else Bool(False))
+
+    def set(self, key: 'str|Ast', value: 'Ast'):
+
+        key = key if isinstance(key, Ast) else Str(key)
         self.props[key] = value
-    
-

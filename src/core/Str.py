@@ -3,7 +3,7 @@ from core.Const import Const
 from core.Ast import Ast
 
 
-@dataclass
+@dataclass(frozen=True)
 class Str(Const):
     value:str
     

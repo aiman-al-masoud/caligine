@@ -1,15 +1,11 @@
 from dataclasses import dataclass
 from typing import List
 from core.Ast import Ast
+from typing import TYPE_CHECKING, List
 
-
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
-
-from typing import TYPE_CHECKING, Dict, List
-
 
 @dataclass
 class FunCall(Ast):
@@ -32,5 +28,5 @@ class FunCall(Ast):
     def get_vars(self) -> List['Var']:
         return [v for x in self.args for v in x.get_vars()]
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return FunCall(self.fun_name, [x.subst(d) for x in self.args])
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return FunCall(self.fun_name, [x.subst(dictionary) for x in self.args])

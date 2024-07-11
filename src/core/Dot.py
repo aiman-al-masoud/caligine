@@ -1,13 +1,10 @@
 from dataclasses import dataclass
 from core.Ast import Ast
-from typing import TYPE_CHECKING, Dict, List
-
-
 from typing import TYPE_CHECKING, List
+
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
-
 
 @dataclass
 class Dot(Ast):
@@ -22,5 +19,5 @@ class Dot(Ast):
     def get_vars(self) -> List['Var']:
         return self.owner.get_vars()
     
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return Dot(self.owner.subst(d), self.key)
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return Dot(self.owner.subst(dictionary), self.key)

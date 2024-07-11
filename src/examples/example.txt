@@ -1,5 +1,5 @@
 
-sprite trump{
+create sprite trump{
     image: "./trump-small.png",
     pos_x: 100,
     pos_y: 200,
@@ -11,13 +11,13 @@ sprite trump{
 #     pos_y: 200,
 # };
 
-sprite sombrero{
+create sprite sombrero{
     image: "./sombrero-small.png",
     pos_x: 100,
     pos_y: 300,
 };
 
-sprite biden{
+create sprite biden{
     image: "./biden-small.png",
     pos_x: 300,
     pos_y: 200,
@@ -40,13 +40,12 @@ assert true;
 assert not false;
 assert 1 != 2;
 
-print "all right!";
 
-client c1 {
+create client c1 {
     avatar: trump
 };
 
-client c2 {
+create client c2 {
     avatar: biden
 };
 
@@ -72,6 +71,19 @@ when c2.keyboard.ArrowLeft == "down" then c2.avatar.pos_x = c2.avatar.pos_x - 10
 
 # when true then trump.pos_x = trump.pos_x - 1;
 
-
 foo(X) means  X.pos_y == 300;
 
+find foo(X);
+
+assert [1,2,3] == [1,2,3];
+
+
+print "all right!";
+
+
+
+# trump = sprite{
+#     image: "./trump-small.png",
+#     pos_x: 100,
+#     pos_y: 200,  
+# };

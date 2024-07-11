@@ -24,5 +24,5 @@ class Not(Ast):
     def get_vars(self) -> List['Var']:
         return self.negated.get_vars()
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return Not(self.negated.subst(d))
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return Not(self.negated.subst(dictionary))

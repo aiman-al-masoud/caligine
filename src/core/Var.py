@@ -11,5 +11,5 @@ class Var(Ast):
     def get_vars(self) -> List['Var']:
         return [self]
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return d.get(self, self)
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return dictionary.get(self, self)

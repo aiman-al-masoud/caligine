@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from core.Ast import Ast
 from typing import TYPE_CHECKING
 
+from core.Find import Find
+
 if TYPE_CHECKING:
     from core.World import World
 
@@ -19,7 +21,9 @@ class Rule(Ast):
 
     def apply(self, world:'World'):
 
-        for d in self.condition.find(world):
+        # for d in self.condition.find(world):
+        for d in Find(self.condition).execute(world).get_values():
+
             consequence = self.consequence.subst(d)
             consequence.execute(world)
 

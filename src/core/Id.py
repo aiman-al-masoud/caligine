@@ -13,7 +13,7 @@ class Id(Ast):
     def execute(self, world: 'World') -> 'Ast':
         return world.get_obj(self.name)
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
+    def subst(self, dictionary: 'Ast') -> 'Ast':
         return self
 
     def get_vars(self) -> List['Var']:

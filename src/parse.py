@@ -3,6 +3,7 @@ from lark import Lark, Transformer, v_args
 from core.Asgn import Asgn
 from core.Bool import Bool
 from core.Def import Def
+from core.Find import Find
 from core.FunCall import FunCall
 from core.Id import Id
 from core.Prog import Prog
@@ -20,7 +21,8 @@ from core.Print import Print
 from core.Str import Str
 from core.Ast import Ast
 from core.Assert import Assert
-
+from core.Sequence import Sequence
+from core.Create import Create
 
 class Parser:
 
@@ -61,11 +63,7 @@ class ToAst(Transformer):
         return Num(float(x))
 
     def STRING(self, x):
-
-        # x = str(x)
-        # if 'png' in x or 'jpg' in x:
-        #     return Img(x)
-
+        
         x = str(x).strip('"')
         return Str(x)
 
@@ -118,7 +116,7 @@ class ToAst(Transformer):
 
         x0 = xs[0]
         assert isinstance(x0, Id)
-        return {x0.name:xs[1], **( xs[2] if len(xs)==3 else  {}) }
+        return {Str(x0.name) :xs[1], **( xs[2] if len(xs)==3 else  {}) }
 
     def object(self, xs):
 
@@ -133,6 +131,8 @@ class ToAst(Transformer):
             case 'client': return Client(x1.name, props)
             case 'keyboard': return Object(x1.name, props)
 
+    def sequence(self, xs):
+        return Sequence(xs[0])
 
     def arg(self, xs):
 
@@ -171,6 +171,12 @@ class ToAst(Transformer):
     def exp_print(self, xs):
         return Print(xs[1])
     
+    def exp_find(self, xs):
+        return Find(xs[1])
+
+    def exp_create(self, xs):
+        return Create(xs[1])
+
     @v_args(meta=True)
     def exp_assert(self, meta, xs):
         return Assert(xs[1], meta.container_line)

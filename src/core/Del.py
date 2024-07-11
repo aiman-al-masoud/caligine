@@ -30,5 +30,5 @@ class Del(Ast):
     def get_vars(self) -> List['Var']:
         return self.delendum.get_vars()
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return Del(self.delendum.subst(d))
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return Del(self.delendum.subst(dictionary))

@@ -1,53 +1,21 @@
-from itertools import product
-from typing import TYPE_CHECKING, Any, Dict, Generator, List
+from typing import TYPE_CHECKING, Dict, List
 
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
 
-
-# class Searchable:
-
-#     def get_vars(self)->List['Var']:
-#         raise Exception()
-
-#     def find(self, world:'World') -> Generator[Dict['Ast', 'Ast'], Any, None]:
-
-#         vars = self.get_vars()
-#         consts = world.get_objs()
-#         const_perms = product(consts, repeat=len(vars)) 
-#         assignments = (zip(vars, p) for p in const_perms)
-
-#         for a in assignments:
-            
-#             a = dict(a)
-
-#             # no repeated individuals
-#             if len({v.name for v in a.values()}) != len(a.values()):
-#                 continue
-
-#             ast_concrete = self.subst(a) # pyright:ignore
-
-#             x = ast_concrete.execute(world)
-#             if x:
-
-#                 yield a # pyright:ignore
-    
-
-
-# class Ast(Searchable):
 class Ast:
 
     def execute(self, world:'World') -> 'Ast':
         raise Exception()
-
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
+    
+    def subst(self, dictionary: 'Ast|Dict[Ast, Ast]') -> 'Ast':
         raise Exception()
 
-    def set(self, key:str, value:'Ast'):
-        raise Exception(self.__class__)
+    def set(self, key:'str|Ast', value:'Ast'):
+        raise Exception()
 
-    def get(self, key:str)->'Ast':
+    def get(self, key:'str|Ast', default:'Ast|None'=None)->'Ast':
         raise Exception()
 
     def perform_op(self, op:str, other:'Ast')->'Ast':
@@ -58,26 +26,4 @@ class Ast:
 
     def get_vars(self)->List['Var']:
         raise Exception()
-
-    def find(self, world:'World') -> Generator[Dict['Ast', 'Ast'], Any, None]:
-
-        vars = self.get_vars()
-        consts = world.get_objs()
-        const_perms = product(consts, repeat=len(vars)) 
-        assignments = (zip(vars, p) for p in const_perms)
-
-        for a in assignments:
-            
-            a = dict(a)
-
-            # no repeated individuals
-            if len({v.name for v in a.values()}) != len(a.values()):
-                continue
-
-            ast_concrete = self.subst(a) # pyright:ignore
-
-            x = ast_concrete.execute(world)
-            if x:
-
-                yield a # pyright:ignore
 

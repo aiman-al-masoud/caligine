@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from core.Const import Const
 from core.Ast import Ast
 
-@dataclass
+@dataclass(frozen=True)
 class Num(Const):
     value:float
 
@@ -30,6 +30,8 @@ class Num(Const):
     def __int__(self):
         return int(self.value)
 
+    def __str__(self) -> str:
+        return str(self.value)
 
 
 

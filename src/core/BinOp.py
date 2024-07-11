@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from core.Ast import Ast
-from typing import TYPE_CHECKING, Dict, List
-
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from core.World import World
@@ -23,5 +22,6 @@ class BinOp(Ast):
     def get_vars(self) -> List['Var']:
         return self.left.get_vars()+self.right.get_vars()
 
-    def subst(self, d: Dict['Ast', 'Ast']) -> 'Ast':
-        return BinOp(self.op, self.left.subst(d), self.right.subst(d))
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+        return BinOp(self.op, self.left.subst(dictionary), self.right.subst(dictionary))
+
