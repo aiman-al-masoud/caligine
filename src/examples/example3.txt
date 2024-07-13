@@ -1,0 +1,15 @@
+print "ciao mondo!";
+
+print 1+2;
+# print 1+true;
+assert 1==1;
+# assert 1!=1;
+
+# print "ciao!";
+
+# 1+true;
+
+create client c1{
+    capra: 1
+};
+

@@ -1,8 +1,8 @@
-
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, List
 from core.Ast import Ast
 from core.Bool import Bool
+from core.Panic import Panic
 
 if TYPE_CHECKING:
     from core.World import World
@@ -16,7 +16,12 @@ class Prog(Ast):
         res:Ast = Bool(False)
 
         for statement in self.statements:
+
             res = statement.execute(world)
+
+            if isinstance(res, Panic):
+                res.execute(world)
+                return res
         
         return res
 

@@ -16,9 +16,9 @@ class Del(Ast):
 
     def execute(self, world: 'World') -> 'Ast':
 
+        # TODO: Remove assertion. Assign rather than create-with-name
         delendum = self.delendum.execute(world)
         assert isinstance(delendum, Object)
-
         world.rm_obj(delendum.name)
         return Bool(True)
 

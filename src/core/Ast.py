@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Dict, List
+
+from core.MetaInfo import MetaInfo
 
 if TYPE_CHECKING:
     from core.World import World
@@ -30,3 +33,11 @@ class Ast:
     def get_vars(self)->List['Var']:
         raise Exception()
 
+    def set_meta_info(self, meta_info:MetaInfo):
+
+        self.meta_info = meta_info
+        return self
+    
+    def get_meta_info(self)->MetaInfo:
+        return self.meta_info
+    

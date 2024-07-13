@@ -15,8 +15,11 @@ class KeyEvent(Ast):
 
     def execute(self, world: 'World') -> 'Ast':
 
+        client = world.get_client(self.client_id)
+        
+        if not client:
+            raise Exception()
 
-        client = world.get_obj(self.client_id).execute(world)
         client.get('keyboard').execute(world).set(self.key, Str(self.state))
         return Bool(True)
 

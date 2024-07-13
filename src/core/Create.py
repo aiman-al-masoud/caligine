@@ -13,7 +13,8 @@ class Create(Ast):
     creandum: Ast
 
     def execute(self, world: 'World') -> 'Ast':
-        
+
+        # TODO: Remove assertion. Assign rather than create-with-name
         assert isinstance(self.creandum, Object)
         self.creandum.init(world)
         world.add_obj(self.creandum)

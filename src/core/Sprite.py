@@ -15,16 +15,18 @@ if TYPE_CHECKING:
 @dataclass
 class Sprite(Object):
 
-    def init(self, world: 'World'):
+    def init(self, world: 'World')->'Ast':
+
+        from core.Panic import Panic        
 
         if not self.has('pos_x'):
-            raise Exception()
+            return Panic(self, 'sprite must have a "pos_x"')
 
         if not self.has('pos_y'):
-            raise Exception()
+            return Panic(self, 'sprite must have a "pos_y"')
         
         if not self.has('image'):
-            raise Exception()
+            return Panic(self, 'sprite must have an "image"')
 
         if not self.has('repeat_cols'):
             self.set('repeat_cols', Num(1))
@@ -34,6 +36,7 @@ class Sprite(Object):
 
         self.set('type', Str('sprite'))
         self.load_image(world)
+        return self
 
     def to_json(self,  include_image:bool=False, offset_x:int=0, offset_y:int=0)->'SpriteJson':
 

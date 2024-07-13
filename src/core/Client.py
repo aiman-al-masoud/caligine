@@ -8,19 +8,31 @@ from core.Str import Str
 
 if TYPE_CHECKING:
     from core.World import World
+    from core.Ast import Ast
 
 @dataclass
 class Client(Object):
 
-    def init(self, world: 'World'):
+    def init(self, world:'World')->'Ast':
 
         self.set('keyboard', Keyboard('keyboard', {}).execute(world))
         self.set('type', Str('client'))
+        
+        if not self.has('avatar'):
+            from core.Panic import Panic
+            return Panic(self, 'client must have an "avatar"')
+        
+        avatar = self.get('avatar').execute(world)
+
+        if not isinstance(avatar, Sprite):
+            from core.Panic import Panic
+            return Panic(self, 'the "avatar" of a client must be a sprite')
+        
+        return self
 
     def center_coords(self, world:'World'):
 
         avatar = self.get('avatar').execute(world)
-        assert isinstance(avatar, Sprite)
         center_x = int(avatar.get('pos_x'))
         center_y = int(avatar.get('pos_y'))
         return center_x, center_y

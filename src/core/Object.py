@@ -14,8 +14,10 @@ class Object(Ast):
     name:str
     props: Dict[Ast, Ast]
 
-    def init(self, world:'World'):
+    def init(self, world:'World')->'Ast':
+        
         self.set('type', Str('object'))
+        return self
 
     def execute(self, world: 'World') -> 'Ast':
         return self
@@ -48,6 +50,8 @@ class Object(Ast):
             case '==': return Bool(self == other)
             case '!=': return Bool(self != other)
         
-        raise Exception()
+        from core.Panic import Panic
+        return Panic(self, f'unsupported operation {self} {op} {other}')
+
         
 

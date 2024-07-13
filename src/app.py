@@ -55,5 +55,10 @@ def send_updated_sprites(client_id:str, include_image:bool=False):
     world = app.config['world']
     assert isinstance(world, World)
     client = world.get_client(client_id)
+
+    if not client:
+        socketio.emit('error', json.dumps({'error':f'Client {client_id} (you) does not exist.'}))
+        return
+
     view = client.see_world(world, include_image)
     socketio.emit('update-sprites', json.dumps(view))

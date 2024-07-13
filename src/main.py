@@ -2,6 +2,7 @@
 import os
 import sys
 from core.Ast import Ast
+from core.Panic import Panic
 from parse import Parser
 from core.World import World
 from app import app, start_update_screen
@@ -15,7 +16,10 @@ text = open(path_script).read()
 ast = parser.parse(text)
 
 assert isinstance(ast, Ast)
-ast.execute(world)
+res = ast.execute(world)
+
+if isinstance(res, Panic):
+    exit()
 
 world.start()
 app.config['world'] = world

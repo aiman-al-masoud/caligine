@@ -24,5 +24,9 @@ class Sequence(Ast):
 
         match op:
             case '==': return Bool(self == other)
+            case '!=': return Bool(self != other)
         
-        raise Exception()
+        from core.Panic import Panic
+        return Panic(self, f'unsupported operation {self} {op} {other}')
+
+        

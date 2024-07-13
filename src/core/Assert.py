@@ -1,8 +1,8 @@
-
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from core.Ast import Ast
 from core.Bool import Bool
+from core.Panic import Panic
 
 if TYPE_CHECKING:
     from core.World import World
@@ -11,12 +11,11 @@ if TYPE_CHECKING:
 class Assert(Ast):
 
     assertion:Ast
-    line_num:int
 
     def execute(self, world: 'World') -> 'Ast':
         
         if not self.assertion.execute(world):
-            world.error(f'Assertion failed at line={self.line_num}')
-            
+            return Panic(self, 'assertion failed')#.execute(world)
+        
         return Bool(True)
 

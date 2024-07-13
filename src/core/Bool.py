@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from core.Const import Const
 from core.Ast import Ast
 
+
 @dataclass(frozen=True)
 class Bool(Const):
     value:bool
@@ -17,7 +18,8 @@ class Bool(Const):
             case '==': return Bool(self == other)
             case '!=': return Bool(self != other)
         
-        raise Exception()
+        from core.Panic import Panic
+        return Panic(self, f'operation not supported {self} {op} {other}')
 
     def is_shorcircuit_binop(self, op: str) -> bool:
         

@@ -6,6 +6,7 @@ from core.Def import Def
 from core.Find import Find
 from core.FunCall import FunCall
 from core.Id import Id
+from core.MetaInfo import MetaInfo
 from core.Prog import Prog
 from core.Var import Var
 from core.Not import Not
@@ -67,61 +68,67 @@ class ToAst(Transformer):
         x = str(x).strip('"')
         return Str(x)
 
-    def exp_call(self, xs):
+    @v_args(meta=True)
+    def exp_call(self, meta, xs):
 
         x0 = xs[0]
         assert isinstance(x0, Id)
-        return FunCall(x0.name, xs[1])
+        return FunCall(x0.name, xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_not(self, xs):
-        return Not(xs[1])
+    @v_args(meta=True)
+    def exp_not(self, meta, xs):
+        return Not(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_add(self, xs):
-        return BinOp('+', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_add(self, meta, xs):
+        return BinOp('+', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_and(self, xs):
-        return BinOp('and', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_and(self, meta, xs):
+        return BinOp('and', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_or(self, xs):
-        return BinOp('or', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_or(self, meta, xs):
+        return BinOp('or', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_sub(self, xs):
-        return BinOp('-', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_sub(self, meta, xs):
+        return BinOp('-', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_mul(self, xs):
-        return BinOp('*', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_mul(self, meta, xs):
+        return BinOp('*', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_div(self, xs):
-        return BinOp('/', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_div(self, meta, xs):
+        return BinOp('/', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_gte(self, xs):
-        return BinOp('>=', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_gte(self, meta, xs):
+        return BinOp('>=', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_lte(self, xs):
-        return BinOp('<=', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_lte(self, meta, xs):
+        return BinOp('<=', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_gt(self, xs):
-        return BinOp('>', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_gt(self, meta, xs):
+        return BinOp('>', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_lt(self, xs):
-        return BinOp('<', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_lt(self, meta, xs):
+        return BinOp('<', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_eq(self, xs):
-        return BinOp('==', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_eq(self, meta, xs):
+        return BinOp('==', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def exp_neq(self, xs):
-        return BinOp('!=', xs[0], xs[1])
+    @v_args(meta=True)
+    def exp_neq(self, meta, xs):
+        return BinOp('!=', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
 
-    def kwarg(self, pairs):
-        return { p[0] :p[1] for p in pairs}
-
-    def pair(self, xs):
-
-        x0 = xs[0]
-        assert isinstance(x0, Id)
-        return [Str(x0.name), xs[1]]
-
-    def object(self, xs):
+    @v_args(meta=True)
+    def object(self, meta, xs):
 
         x0 = xs[0]
         x1 = xs[1]
@@ -130,12 +137,68 @@ class ToAst(Transformer):
         props = xs[2] if len(xs) > 2 else {}
 
         match x0.name:
-            case 'sprite': return Sprite(x1.name, props)
-            case 'client': return Client(x1.name, props)
-            case 'keyboard': return Object(x1.name, props)
+            case 'sprite': return Sprite(x1.name, props).set_meta_info(MetaInfo.from_lark(meta))
+            case 'client': return Client(x1.name, props).set_meta_info(MetaInfo.from_lark(meta))
+            case 'keyboard': return Object(x1.name, props).set_meta_info(MetaInfo.from_lark(meta))
 
-    def sequence(self, xs):
-        return Sequence(xs[0])
+    @v_args(meta=True)
+    def sequence(self, meta, xs):
+        return Sequence(xs[0]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_rule(self, meta, xs):
+        return Rule(xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_def(self, meta, xs):
+
+        fun_call = xs[0]
+        assert isinstance(fun_call, FunCall)
+        return Def(fun_call.fun_name, fun_call.args, xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_prog(self, meta, xs):
+        return Prog(xs).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_dot(self, meta, xs):
+        
+        x1 = xs[1]
+        assert isinstance(x1, Id)
+        return Dot(xs[0], x1.name).set_meta_info(MetaInfo.from_lark(meta))
+    
+    @v_args(meta=True)
+    def exp_asgn(self, meta, xs):
+
+        dot = xs[0]
+        assert isinstance(dot, Dot)
+        return Asgn(dot.owner, dot.key, xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_del(self, meta, xs):
+        return Del(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_print(self, meta, xs):
+        return Print(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_find(self, meta, xs):
+        return Find(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_create(self, meta, xs):
+        return Create(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    @v_args(meta=True)
+    def exp_assert(self, meta, xs):
+        return Assert(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+
+    def pair(self, xs):
+
+        x0 = xs[0]
+        assert isinstance(x0, Id)
+        return [Str(x0.name), xs[1]]
 
     def arg(self, xs):
 
@@ -144,42 +207,5 @@ class ToAst(Transformer):
         else:
             return xs
 
-    def exp_rule(self, xs):
-        return Rule(xs[0], xs[1])
-
-    def exp_def(self, xs):
-
-        fun_call = xs[0]
-        assert isinstance(fun_call, FunCall)
-        return Def(fun_call.fun_name, fun_call.args, xs[1])
-
-    def exp_prog(self, xs):
-        return Prog(xs)
-
-    def exp_dot(self, xs):
-        
-        x1 = xs[1]
-        assert isinstance(x1, Id)
-        return Dot(xs[0], x1.name)
-    
-    def exp_asgn(self, xs):
-
-        dot = xs[0]
-        assert isinstance(dot, Dot)
-        return Asgn(dot.owner, dot.key, xs[1])
-
-    def exp_del(self, xs):
-        return Del(xs[1])
-
-    def exp_print(self, xs):
-        return Print(xs[1])
-    
-    def exp_find(self, xs):
-        return Find(xs[1])
-
-    def exp_create(self, xs):
-        return Create(xs[1])
-
-    @v_args(meta=True)
-    def exp_assert(self, meta, xs):
-        return Assert(xs[1], meta.container_line)
+    def kwarg(self, pairs):
+        return { p[0] :p[1] for p in pairs}

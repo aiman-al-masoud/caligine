@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
+import sys
 from threading import Thread
-from typing import TYPE_CHECKING, Callable, List, Tuple
+from typing import TYPE_CHECKING, List, TextIO, Tuple
 from core.Sprite import Sprite
 from core.Client import Client
 from core.Def import Def
@@ -21,7 +22,8 @@ class World:
     canvas_size: Tuple[int, int] = (400, 400)
     canvas_bg_color: str = 'rgb(100, 100, 100)'
     path_script:str = ''
-    print_msg:Callable[[str], None] = print
+    stdout:TextIO = sys.stdout
+    stderr:TextIO = sys.stderr
 
     def add_def(self, d: Def):
         self.defs.append(d)
@@ -41,7 +43,7 @@ class World:
     def get_obj(self, name: str):
 
         if not self.has_obj(name):
-            raise Exception(f'"{name}" does not exist')
+            return None
 
         return [x for x in self.objs if x.name == name][0]
 
@@ -52,12 +54,6 @@ class World:
 
         for rule in self.rules:
             rule.apply(self)
-
-    def print(self, msg: str):
-        self.print_msg(msg)
-
-    def error(self, msg: str):
-        raise Exception(msg)
 
     def put_event(self, e: 'KeyEvent'):
         self.event_queue.put(e)
@@ -85,7 +81,12 @@ class World:
     def get_client(self, name: str):
 
         clients = self.get_clients()
-        client = [c for c in clients if c.name == name][0]
+        clients_filtered = [c for c in clients if c.name == name]
+
+        if not clients_filtered:
+            return None
+
+        client = clients_filtered[0]
         return client
 
     def get_sprites(self):

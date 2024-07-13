@@ -18,7 +18,14 @@ class BinOp(Ast):
         left = self.left.execute(world)
         if left.is_shorcircuit_binop(self.op): return left
         right = self.right.execute(world)
-        return left.perform_op(self.op, right)
+        res = left.perform_op(self.op, right)
+
+        from core.Panic import Panic
+
+        if isinstance(res, Panic):
+            return Panic(self, res.message)
+            
+        return res
 
     def get_vars(self) -> List['Var']:
         return self.left.get_vars()+self.right.get_vars()
