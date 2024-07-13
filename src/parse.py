@@ -153,7 +153,7 @@ class ToAst(Transformer):
         assert isinstance(fun_call, FunCall)
         return Def(fun_call.fun_name, fun_call.args, xs[1])
 
-    def statement(self, xs):
+    def exp_prog(self, xs):
         return Prog(xs)
 
     def exp_dot(self, xs):

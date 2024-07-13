@@ -1,15 +1,13 @@
 
 from core.Ast import Ast
 from dataclasses import dataclass
-
-
+from core.Object import Object
+from core.Bool import Bool
 from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
-
-from typing import TYPE_CHECKING, Dict, List
 
 
 @dataclass
@@ -17,9 +15,6 @@ class Del(Ast):
     delendum:Ast
 
     def execute(self, world: 'World') -> 'Ast':
-
-        from core.Object import Object
-        from core.Bool import Bool
 
         delendum = self.delendum.execute(world)
         assert isinstance(delendum, Object)

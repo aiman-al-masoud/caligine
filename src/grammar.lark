@@ -6,14 +6,11 @@
 %ignore WS
 %ignore COMMENT
 
-?start: statement
-?statement: exp | (exp ";")+
-arg: exp | exp "," arg+ ","?
-kwarg : [pair ("," pair)*]
-pair : CNAME ":" exp
-?exp: exp_rule
-?exp_rule: exp_def | "when" exp "then" exp_def
-?exp_def: exp_print | exp_call "means" exp_find
+?start: exp
+?exp: exp_prog
+?exp_prog: exp_rule | (exp_prog ";")+ | "{" exp_prog "}"
+?exp_rule: exp_def | "when" exp "then" exp
+?exp_def: exp_print | exp_call "{" exp "}"
 ?exp_print: exp_assert | PRINT exp_print
 ?exp_assert: exp_del | ASSERT exp_assert
 ?exp_del: exp_find | DELETE exp_del
@@ -39,6 +36,9 @@ pair : CNAME ":" exp
 ?atom: object | sequence | CNAME | NUMBER | STRING | "(" exp ")"
 ?object: CNAME CNAME "{" kwarg? "}"
 sequence: "[" arg? "]" 
+arg: exp | exp "," arg+ ","?
+kwarg : [pair ("," pair)*]
+pair : CNAME ":" exp
 
 PRINT: "print"
 CREATE: "create"

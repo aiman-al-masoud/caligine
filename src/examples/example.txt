@@ -26,8 +26,20 @@ create sprite biden{
 };
 
 
-squared(X) means X * X;
-coincide(X, Y) means X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
+squared(X){
+    X * X;
+};
+
+coincide(X, Y){
+    X.pos_x == Y.pos_x and X.pos_y == Y.pos_y;
+};
+
+foo(X){
+    X.pos_y == 300;
+};
+
+
+
 
 # when trump.pos_x > 1 then kill(trump);
 # when is_down(keys.left_arrow) then trump.vel_x = -10;
@@ -59,7 +71,15 @@ assert c1.keyboard.control == "up";
 # delete sombrero;
 # when c1.keyboard.ArrowRight == "down" then delete sombrero;
 
-when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = c1.avatar.pos_x + 10;
+when c1.keyboard.ArrowRight == "down" then {
+    c1.avatar.pos_x = c1.avatar.pos_x + 5;
+    c1.avatar.pos_x = c1.avatar.pos_x + 5;
+};
+
+# when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = c1.avatar.pos_x + 10;
+
+
+
 when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = c1.avatar.pos_x - 10;
 
 
@@ -73,7 +93,6 @@ when c2.keyboard.ArrowLeft == "down" then c2.avatar.pos_x = c2.avatar.pos_x - 10
 
 # when true then trump.pos_x = trump.pos_x - 1;
 
-foo(X) means  X.pos_y == 300;
 
 find foo(X);
 
@@ -87,5 +106,5 @@ print "all right!";
 # trump = sprite{
 #     image: "./trump-small.png",
 #     pos_x: 100,
-#     pos_y: 200,  
+#     pos_y: 200  
 # };

@@ -1,4 +1,5 @@
 import os
+import sys
 from threading import Thread
 from flask import Flask, json
 from core.KeyEvent import KeyEvent
@@ -8,13 +9,15 @@ from time import sleep
 import logging
 from core.World import World
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'buruf'
 socketio = SocketIO(app)
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+cli = sys.modules['flask.cli']
+cli.show_server_banner = lambda *x: None # pyright:ignore
 
 @app.route('/', methods=['GET'])
 def index():

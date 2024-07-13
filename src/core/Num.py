@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 from core.Const import Const
 from core.Ast import Ast
+from core.Bool import Bool
 
 @dataclass(frozen=True)
 class Num(Const):
     value:float
 
     def perform_op(self, op: str, other: 'Ast') -> 'Ast':
-
-        from core.Bool import Bool
 
         if not isinstance(other, Num):
             return Bool(False)
@@ -32,7 +31,3 @@ class Num(Const):
 
     def __str__(self) -> str:
         return str(self.value)
-
-
-
-    
