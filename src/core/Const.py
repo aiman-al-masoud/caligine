@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from core.Ast import Ast
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, List
 
 
 if TYPE_CHECKING:

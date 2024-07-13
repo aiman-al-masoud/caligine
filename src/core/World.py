@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from threading import Thread
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, Callable, List, Tuple
 from core.Sprite import Sprite
 from core.Client import Client
 from core.Def import Def
@@ -14,13 +14,14 @@ if TYPE_CHECKING:
 
 @dataclass
 class World:
-    objs: List['Object']
-    defs: List['Def']
-    rules: List['Rule']
+    objs: List['Object'] = field(default_factory=lambda: [])
+    defs: List['Def'] = field(default_factory=lambda: [])
+    rules: List['Rule'] = field(default_factory=lambda: [])
     event_queue: Queue['KeyEvent'] = field(default_factory=lambda: Queue())
     canvas_size: Tuple[int, int] = (400, 400)
     canvas_bg_color: str = 'rgb(100, 100, 100)'
     path_script:str = ''
+    print_msg:Callable[[str], None] = print
 
     def add_def(self, d: Def):
         self.defs.append(d)
@@ -53,7 +54,7 @@ class World:
             rule.apply(self)
 
     def print(self, msg: str):
-        print(msg)
+        self.print_msg(msg)
 
     def error(self, msg: str):
         raise Exception(msg)

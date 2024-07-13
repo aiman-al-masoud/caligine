@@ -3,6 +3,8 @@ from typing import List
 from core.Ast import Ast
 from typing import TYPE_CHECKING, List
 
+from core.Object import Object
+
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
@@ -20,7 +22,7 @@ class FunCall(Ast):
                 continue
 
             d = dict(zip(definition.args, self.args))
-            body = definition.body.subst(d)
+            body = definition.body.subst(Object('', d))
             return body.execute(world)
         
         raise Exception(f'Function {self.fun_name} is not defined.')

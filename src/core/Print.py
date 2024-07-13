@@ -1,6 +1,6 @@
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from core.Ast import Ast
 from core.Bool import Bool
 
@@ -16,5 +16,5 @@ class Print(Ast):
         world.print(str(self.prindandum.execute(world)))
         return Bool(True)
     
-    def subst(self, dictionary: 'Ast|Dict[Ast, Ast]') -> 'Ast':
+    def subst(self, dictionary: 'Ast') -> 'Ast':
         return Print(self.prindandum.subst(dictionary))

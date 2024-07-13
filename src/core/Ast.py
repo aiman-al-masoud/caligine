@@ -9,7 +9,7 @@ class Ast:
     def execute(self, world:'World') -> 'Ast':
         raise Exception()
     
-    def subst(self, dictionary: 'Ast|Dict[Ast, Ast]') -> 'Ast':
+    def subst(self, dictionary: 'Ast') -> 'Ast':
         raise Exception()
 
     def set(self, key:'str|Ast', value:'Ast'):
@@ -26,7 +26,7 @@ class Ast:
 
     def __int__(self)->int:
         raise Exception()
-
+    
     def get_vars(self)->List['Var']:
         raise Exception()
 

@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import List
 from core.Ast import Ast
-from typing import Dict, List
 
 
 @dataclass(frozen=True)

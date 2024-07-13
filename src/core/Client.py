@@ -43,6 +43,8 @@ class Client(Object):
             ) for s in sprites]
         
         return sprites_data
-    
+
+    def __str__(self):
+        return f'client{{name={self.name}}}' 
 
 

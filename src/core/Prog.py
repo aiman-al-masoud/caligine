@@ -20,6 +20,6 @@ class Prog(Ast):
         
         return res
 
-    def subst(self, dictionary: 'Ast|Dict[Ast, Ast]') -> 'Ast':
+    def subst(self, dictionary: 'Ast') -> 'Ast':
         
         return Prog([s.subst(dictionary) for s in self.statements])

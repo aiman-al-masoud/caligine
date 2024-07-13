@@ -1,7 +1,8 @@
 create sprite trump{
     image: "./trump-small.png",
     pos_x: 100,
-    pos_y: 200
+    pos_y: 200,
+    score: 0
 };
 
 create sprite burger1{
@@ -54,7 +55,7 @@ collide(X,Y){
 
 when collide(trump, Y) then {
     delete Y;
-    print "trump ate something!";
+    trump.score = trump.score +1;
 };
 
-
+c1.keyboard.ArrowRight = "down";
