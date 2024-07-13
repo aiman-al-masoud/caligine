@@ -43,6 +43,18 @@ class Client(Object):
             ) for s in sprites]
         
         return sprites_data
+    
+    def see_world(self, world:'World', include_image:bool=False):
+
+        sprites_data = self.get_sprite_data_from_own_perspective(world, include_image)
+
+        return {
+            'sprites': sprites_data, 
+            'client_id': self.name,  
+            'canvas_width': world.get_canvas_width(), 
+            'canvas_height': world.get_canvas_height(), 
+            'canvas_bg_color': world.get_canvas_bg_color(),
+        }
 
     def __str__(self):
         return f'client{{name={self.name}}}' 
