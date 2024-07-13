@@ -18,3 +18,11 @@ class Bool(Const):
             case '!=': return Bool(self != other)
         
         raise Exception()
+
+    def is_shorcircuit_binop(self, op: str) -> bool:
+        
+        match op:
+            case 'and': return not self
+            case 'or': return bool(self)
+        
+        return False

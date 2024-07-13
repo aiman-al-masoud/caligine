@@ -16,7 +16,7 @@ class FunCall(Ast):
         
         for definition in world.defs:
             
-            if self.fun_name != definition.name:
+            if not definition.matches(self):
                 continue
 
             d = dict(zip(definition.args, self.args))

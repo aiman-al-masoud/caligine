@@ -14,6 +14,9 @@ class Object(Ast):
     name:str
     props: Dict[Ast, Ast]
 
+    def init(self, world:'World'):
+        self.set('type', Str('object'))
+
     def execute(self, world: 'World') -> 'Ast':
         return self
 
@@ -35,3 +38,16 @@ class Object(Ast):
 
         key = key if isinstance(key, Ast) else Str(key)
         return key in self.props
+    
+    def __str__(self) -> str:
+        return str({str(k):str(v) for k, v in self.props.items()})
+    
+    def perform_op(self, op: str, other: 'Ast') -> 'Ast':
+
+        match op:
+            case '==': return Bool(self == other)
+            case '!=': return Bool(self != other)
+        
+        raise Exception()
+        
+

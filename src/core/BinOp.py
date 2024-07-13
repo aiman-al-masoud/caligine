@@ -16,6 +16,7 @@ class BinOp(Ast):
     def execute(self, world: 'World') -> 'Ast':
 
         left = self.left.execute(world)
+        if left.is_shorcircuit_binop(self.op): return left
         right = self.right.execute(world)
         return left.perform_op(self.op, right)
 

@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Optional, TypedDict
 from PIL import Image
 from core.Object import Object
 from core.Num import Num
+from core.Str import Str
 
 if TYPE_CHECKING:
     from core.World import World
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 @dataclass
 class Sprite(Object):
 
-    def execute(self, world: 'World') -> 'Ast':
+    def init(self, world: 'World'):
 
         if not self.has('pos_x'):
             raise Exception()
@@ -31,9 +32,8 @@ class Sprite(Object):
         if not self.has('repeat_rows'):
             self.set('repeat_rows', Num(1))
 
+        self.set('type', Str('sprite'))
         self.load_image(world)
-
-        return self
 
     def to_json(self,  include_image:bool=False, offset_x:int=0, offset_y:int=0)->'SpriteJson':
 
@@ -68,6 +68,12 @@ class Sprite(Object):
         if str(key) == 'height':
             return Num(self.image.height * int(self.get('repeat_cols')))
 
+        if str(key) == 'right_x':
+            return self.get('pos_x').perform_op('+', self.get('width'))
+
+        if str(key) == 'bottom_y':
+            return self.get('pos_y').perform_op('+', self.get('height'))
+
         return super().get(key, default)
     
     def load_image(self, world:'World'):
@@ -78,6 +84,9 @@ class Sprite(Object):
         path_img_abs = os.path.join(path_folder, path_img_rel)
         path_img_abs = os.path.abspath(path_img_abs)
         self.image = Image.open(path_img_abs)
+    
+    def __str__(self) -> str:
+        return f'sprite{{name={self.name}}}'
 
 
 class SpriteJson(TypedDict):

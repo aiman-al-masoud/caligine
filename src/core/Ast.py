@@ -18,6 +18,9 @@ class Ast:
     def get(self, key:'str|Ast', default:'Ast|None'=None)->'Ast':
         raise Exception()
 
+    def is_shorcircuit_binop(self, op:str)->bool:
+        return False
+
     def perform_op(self, op:str, other:'Ast')->'Ast':
         raise Exception()
 

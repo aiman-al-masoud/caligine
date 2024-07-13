@@ -1,21 +1,21 @@
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from core.Keyboard import Keyboard
 from core.Object import Object
 from core.Sprite import Sprite
-
+from core.Str import Str
 
 if TYPE_CHECKING:
     from core.World import World
 
-
 @dataclass
 class Client(Object):
 
-    def __post_init__(self):
-        self.set('keyboard', Keyboard('keyboard', {}))
+    def init(self, world: 'World'):
 
+        self.set('keyboard', Keyboard('keyboard', {}).execute(world))
+        self.set('type', Str('client'))
 
     def center_coords(self, world:'World'):
 

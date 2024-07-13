@@ -13,3 +13,6 @@ class Var(Ast):
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
         return dictionary.get(self, self)
+    
+    def __str__(self) -> str:
+        return self.name.upper()
