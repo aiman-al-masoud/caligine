@@ -12,6 +12,6 @@ if TYPE_CHECKING:
 class Keyboard(Object):
 
     def init(self, world: 'World')->'Ast':
-
+        
         self.set('type', Str(value='keyboard'))
         return self

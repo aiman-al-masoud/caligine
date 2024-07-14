@@ -6,6 +6,7 @@ from core.Def import Def
 from core.Find import Find
 from core.FunCall import FunCall
 from core.Id import Id
+from core.Keyboard import Keyboard
 from core.MetaInfo import MetaInfo
 from core.Prog import Prog
 from core.Var import Var
@@ -150,7 +151,9 @@ class ToAst(Transformer):
         match x0.name:
             case 'sprite': return Sprite(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
             case 'client': return Client(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
-            case 'keyboard': return Object(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
+            case 'keyboard': return Keyboard(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
+
+        raise Exception()
 
     @v_args(meta=True)
     def sequence(self, meta, xs):
@@ -219,4 +222,6 @@ class ToAst(Transformer):
             return xs
 
     def kwarg(self, pairs):
+
+        pairs = [p for p in pairs if p is not None]
         return {p[0]: p[1] for p in pairs}

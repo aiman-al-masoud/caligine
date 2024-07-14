@@ -34,7 +34,7 @@
 ?exp_dot: exp_call | exp_dot "." cname
 ?exp_call: atom | cname "(" arg? ")"
 ?atom: object | sequence | cname | number | string | "(" exp ")"
-?object: cname cname "{" kwarg? "}"
+?object: cname cname "{" kwarg "}"
 sequence: "[" arg? "]" 
 arg: exp | exp "," arg+ ","?
 kwarg : [pair ("," pair)*]

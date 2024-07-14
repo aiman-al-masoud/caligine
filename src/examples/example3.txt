@@ -1,16 +1,26 @@
-print "ciao mondo!";
+# print "ciao mondo!";
+# 
+# print 1+2;
+# # print 1+true;
+# assert 1==1;
+# # assert 1!=1;
+# 
+# # print "ciao!";
+# 
+# # 1+true;
+# 
+# # create client c1{
+# #     capra: 1
+# # };
+# 
+# # cretinaggiare(1);
 
-print 1+2;
-# print 1+true;
-assert 1==1;
-# assert 1!=1;
+create keyboard k{
+    crap: 10
+};
 
-# print "ciao!";
+print k.type;
+print k.crap;
+crap = k.crap +1;
+print k.crap;
 
-# 1+true;
-
-# create client c1{
-#     capra: 1
-# };
-
-cretinaggiare(1);
