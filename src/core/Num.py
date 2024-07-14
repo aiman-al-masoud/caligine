@@ -12,7 +12,7 @@ class Num(Const):
         from core.Panic import Panic
 
         if not isinstance(other, Num):
-            return Panic(self, 'number only supports operations with other numbers')
+            raise Panic(self, 'number only supports operations with other numbers')
 
         match op:
             case '+': return Num(self.value + other.value)
@@ -26,7 +26,7 @@ class Num(Const):
             case '==': return Bool(self.value == other.value)
             case '!=': return Bool(self.value != other.value)
 
-        return Panic(self, f'unsupported operation {self} {op} {other}')
+        raise Panic(self, f'unsupported operation {self} {op} {other}')
     
     def __int__(self):
         return int(self.value)

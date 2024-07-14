@@ -19,7 +19,7 @@ class Bool(Const):
             case '!=': return Bool(self != other)
         
         from core.Panic import Panic
-        return Panic(self, f'operation not supported {self} {op} {other}')
+        raise Panic(self, f'operation not supported {self} {op} {other}')
 
     def is_shorcircuit_binop(self, op: str) -> bool:
         

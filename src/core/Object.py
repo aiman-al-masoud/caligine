@@ -51,7 +51,7 @@ class Object(Ast):
             case '!=': return Bool(self != other)
         
         from core.Panic import Panic
-        return Panic(self, f'unsupported operation {self} {op} {other}')
+        raise Panic(self, f'unsupported operation {self} {op} {other}')
 
         
 

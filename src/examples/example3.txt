@@ -7,9 +7,9 @@ assert 1==1;
 
 # print "ciao!";
 
-# 1+true;
+1+true;
 
-create client c1{
-    capra: 1
-};
+# create client c1{
+#     capra: 1
+# };
 

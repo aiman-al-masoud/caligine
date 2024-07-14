@@ -26,7 +26,7 @@ class FunCall(Ast):
             return body.execute(world)
         
         from core.Panic import Panic
-        return Panic(self, f'the function {self.fun_name} is not defined')
+        raise Panic(self, f'the function {self.fun_name} is not defined')
 
     def get_vars(self) -> List['Var']:
         return [v for x in self.args for v in x.get_vars()]

@@ -1,22 +1,15 @@
-from dataclasses import dataclass
 from core.Ast import Ast
-from core.World import World
 
+class Panic(Exception):
 
-@dataclass
-class Panic(Ast):
-    
-    panicked_ast:Ast
-    message:str
+    def __init__(self, panicked_ast:Ast, message:str) -> None:
 
-    def execute(self, world: 'World') -> 'Ast':
-
+        self.panicked_ast = panicked_ast
         meta = self.panicked_ast.get_meta_info()
         line = meta.line
         column = meta.column
-        world.stderr.write(f'Error: {self.message} at: line={line} column={column}\n')
-        world.stderr.flush()
-        return self
+        full_message = f'Error: {message} at: line={line} column={column}\n'
+        super().__init__(full_message)
 
     def is_shorcircuit_binop(self, op: str) -> bool:
         return True        

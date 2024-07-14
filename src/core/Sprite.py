@@ -20,13 +20,13 @@ class Sprite(Object):
         from core.Panic import Panic        
 
         if not self.has('pos_x'):
-            return Panic(self, 'sprite must have a "pos_x"')
+            raise Panic(self, 'sprite must have a "pos_x"')
 
         if not self.has('pos_y'):
-            return Panic(self, 'sprite must have a "pos_y"')
+            raise Panic(self, 'sprite must have a "pos_y"')
         
         if not self.has('image'):
-            return Panic(self, 'sprite must have an "image"')
+            raise Panic(self, 'sprite must have an "image"')
 
         if not self.has('repeat_cols'):
             self.set('repeat_cols', Num(1))

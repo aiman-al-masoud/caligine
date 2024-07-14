@@ -16,7 +16,7 @@ class Id(Ast):
 
         if object is None:
             from core.Panic import Panic
-            return Panic(self, f'the object {self.name} is not defined')
+            raise Panic(self, f'the object {self.name} is not defined')
         
         return object
 

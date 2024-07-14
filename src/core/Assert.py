@@ -15,7 +15,7 @@ class Assert(Ast):
     def execute(self, world: 'World') -> 'Ast':
         
         if not self.assertion.execute(world):
-            return Panic(self, 'assertion failed')#.execute(world)
+            raise Panic(self, 'assertion failed')#.execute(world)
         
         return Bool(True)
 
