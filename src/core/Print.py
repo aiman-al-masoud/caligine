@@ -1,22 +1,25 @@
 
-from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Optional
 from core.Ast import Ast
 from core.Bool import Bool
+from core.MetaInfo import MetaInfo
 
 if TYPE_CHECKING:
     from core.World import World
 
-@dataclass
+
+@dataclass(kw_only=True)
 class Print(Ast):
-    prindandum:Ast
+
+    prindandum: Ast
+    meta_info: Optional[MetaInfo] = field(default=None, compare=False)
 
     def execute(self, world: 'World') -> 'Ast':
 
-        world.stdout.write(str(self.prindandum.execute(world))+'\n') 
+        world.stdout.write(str(self.prindandum.execute(world))+'\n')
         world.stdout.flush()
-        # world.print(str(self.prindandum.execute(world)))
-        return Bool(True)
-    
+        return Bool(value=True)
+
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Print(self.prindandum.subst(dictionary))
+        return Print(prindandum=self.prindandum.subst(dictionary))

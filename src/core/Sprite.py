@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from core.World import World
     from core.Ast import Ast
 
-@dataclass
+@dataclass(kw_only=True)
 class Sprite(Object):
 
     def init(self, world: 'World')->'Ast':
@@ -29,12 +29,12 @@ class Sprite(Object):
             raise Panic(self, 'sprite must have an "image"')
 
         if not self.has('repeat_cols'):
-            self.set('repeat_cols', Num(1))
+            self.set('repeat_cols', Num(value=1))
 
         if not self.has('repeat_rows'):
-            self.set('repeat_rows', Num(1))
+            self.set('repeat_rows', Num(value=1))
 
-        self.set('type', Str('sprite'))
+        self.set('type', Str(value='sprite'))
         self.load_image(world)
         return self
 
@@ -66,10 +66,10 @@ class Sprite(Object):
     def get(self, key: 'str|Ast', default: 'Ast|None' = None) -> 'Ast':
         
         if str(key) == 'width':
-            return Num(self.image.width * int(self.get('repeat_rows')))
+            return Num(value=self.image.width * int(self.get('repeat_rows')))
 
         if str(key) == 'height':
-            return Num(self.image.height * int(self.get('repeat_cols')))
+            return Num(value=self.image.height * int(self.get('repeat_cols')))
 
         if str(key) == 'right_x':
             return self.get('pos_x').perform_op('+', self.get('width'))

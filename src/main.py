@@ -8,7 +8,7 @@ from core.World import World
 from app import app, start_update_screen
 
 parser = Parser()
-world = World([], [], [])
+world = World()
 
 path_script = os.path.abspath(sys.argv[1]) 
 world.set_path_script(path_script)

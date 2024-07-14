@@ -1,15 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from core.Ast import Ast
-from typing import TYPE_CHECKING, List
-
+from typing import TYPE_CHECKING, List, Optional
+from core.MetaInfo import MetaInfo
 
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
 
-@dataclass(frozen=True)
+
+@dataclass(frozen=True, kw_only=True)
 class Const(Ast):
-    
+
+    meta_info: Optional[MetaInfo] = field(default=None, compare=False)
+
     def execute(self, world: 'World') -> 'Ast':
         return self
 

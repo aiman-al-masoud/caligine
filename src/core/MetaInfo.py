@@ -1,11 +1,20 @@
 from dataclasses import dataclass
 
+from lark.tree import Meta
 
-@dataclass
+@dataclass(kw_only=True)
 class MetaInfo:
-    line: int
-    column: int
+
+    meta:Meta
 
     @classmethod
     def from_lark(cls, meta):
-        return MetaInfo(meta.line, meta.column)
+        return MetaInfo(meta=meta)
+    
+    @property
+    def line(self):
+        return self.meta.line
+
+    @property
+    def column(self):
+        return self.meta.column

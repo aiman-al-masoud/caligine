@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, List, Optional
 
 from core.MetaInfo import MetaInfo
 
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
+
 
 class Ast:
 
@@ -41,3 +42,4 @@ class Ast:
     def get_meta_info(self)->MetaInfo:
         return self.meta_info
     
+

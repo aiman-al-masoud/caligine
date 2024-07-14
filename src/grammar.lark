@@ -31,14 +31,14 @@
 ?exp_mul: exp_not | exp_not "*" exp_mul+
 ?exp_not: exp_min | NOT exp_not
 ?exp_min: exp_dot | MINUS exp_min
-?exp_dot: exp_call | exp_dot "." CNAME
-?exp_call: atom | CNAME "(" arg? ")"
-?atom: object | sequence | CNAME | NUMBER | STRING | "(" exp ")"
-?object: CNAME CNAME "{" kwarg? "}"
+?exp_dot: exp_call | exp_dot "." cname
+?exp_call: atom | cname "(" arg? ")"
+?atom: object | sequence | cname | number | string | "(" exp ")"
+?object: cname cname "{" kwarg? "}"
 sequence: "[" arg? "]" 
 arg: exp | exp "," arg+ ","?
 kwarg : [pair ("," pair)*]
-pair : CNAME ":" exp
+pair : cname ":" exp
 
 PRINT: "print"
 CREATE: "create"
@@ -48,3 +48,7 @@ NOT: "not"
 ASSERT: "assert"
 MINUS: "-"
 COMMENT: "#" /[^\n]/*
+
+cname: CNAME
+number: NUMBER
+string: STRING

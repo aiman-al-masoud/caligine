@@ -1,7 +1,8 @@
-from dataclasses import dataclass
-from typing import List
+from dataclasses import dataclass, field
+from typing import List, Optional
 from core.Ast import Ast
 from typing import TYPE_CHECKING, List
+from core.MetaInfo import MetaInfo
 
 from core.Object import Object
 
@@ -9,10 +10,11 @@ if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
 
-@dataclass
+@dataclass(kw_only=True)
 class FunCall(Ast):
     fun_name:str
     args:List[Ast]
+    meta_info: Optional[MetaInfo] = field(default=None, compare=False)
 
     def execute(self, world: 'World') -> 'Ast':
         
@@ -22,7 +24,7 @@ class FunCall(Ast):
                 continue
 
             d = dict(zip(definition.args, self.args))
-            body = definition.body.subst(Object('', d))
+            body = definition.body.subst(Object(name='',props= d))
             return body.execute(world)
         
         from core.Panic import Panic
@@ -32,4 +34,4 @@ class FunCall(Ast):
         return [v for x in self.args for v in x.get_vars()]
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return FunCall(self.fun_name, [x.subst(dictionary) for x in self.args])
+        return FunCall(fun_name=self.fun_name, args=[x.subst(dictionary) for x in self.args])

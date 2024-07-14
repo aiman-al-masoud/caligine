@@ -3,7 +3,7 @@ from core.Const import Const
 from core.Ast import Ast
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Bool(Const):
     value:bool
 
@@ -15,8 +15,8 @@ class Bool(Const):
         match op:
             case 'and': return self and other
             case 'or': return self or other
-            case '==': return Bool(self == other)
-            case '!=': return Bool(self != other)
+            case '==': return Bool(value=self == other)
+            case '!=': return Bool(value=self != other)
         
         from core.Panic import Panic
         raise Panic(self, f'operation not supported {self} {op} {other}')

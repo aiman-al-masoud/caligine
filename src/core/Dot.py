@@ -1,15 +1,20 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from core.Ast import Ast
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
+
+from core.MetaInfo import MetaInfo
 
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
 
-@dataclass
+@dataclass(kw_only=True)
 class Dot(Ast):
+
     owner:Ast
     key:str
+    meta_info: Optional[MetaInfo] = field(default=None, compare=False)
+
 
     def execute(self, world: 'World') -> 'Ast':
         
@@ -20,4 +25,4 @@ class Dot(Ast):
         return self.owner.get_vars()
     
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Dot(self.owner.subst(dictionary), self.key)
+        return Dot(owner=self.owner.subst(dictionary), key=self.key)

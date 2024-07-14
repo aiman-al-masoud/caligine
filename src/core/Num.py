@@ -3,7 +3,7 @@ from core.Const import Const
 from core.Ast import Ast
 from core.Bool import Bool
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Num(Const):
     value:float
 
@@ -15,16 +15,16 @@ class Num(Const):
             raise Panic(self, 'number only supports operations with other numbers')
 
         match op:
-            case '+': return Num(self.value + other.value)
-            case '-': return Num(self.value - other.value)
-            case '*': return Num(self.value * other.value)
-            case '/': return Num(self.value / other.value)
-            case '>': return Bool(self.value > other.value)
-            case '<': return Bool(self.value < other.value)
-            case '>=': return Bool(self.value >= other.value)
-            case '<=': return Bool(self.value <= other.value)
-            case '==': return Bool(self.value == other.value)
-            case '!=': return Bool(self.value != other.value)
+            case '+': return Num(value=self.value + other.value)
+            case '-': return Num(value=self.value - other.value)
+            case '*': return Num(value=self.value * other.value)
+            case '/': return Num(value=self.value / other.value)
+            case '>': return Bool(value=self.value > other.value)
+            case '<': return Bool(value=self.value < other.value)
+            case '>=': return Bool(value=self.value >= other.value)
+            case '<=': return Bool(value=self.value <= other.value)
+            case '==': return Bool(value=self.value == other.value)
+            case '!=': return Bool(value=self.value != other.value)
 
         raise Panic(self, f'unsupported operation {self} {op} {other}')
     

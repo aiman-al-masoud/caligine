@@ -25,107 +25,118 @@ from core.Assert import Assert
 from core.Sequence import Sequence
 from core.Create import Create
 
+
 class Parser:
 
     def __init__(self):
 
-        path_grammar = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'grammar.lark')
+        dir_current = os.path.split(os.path.abspath(__file__))[0]
+        path_grammar = os.path.join(dir_current, 'grammar.lark')
 
         self.lark = Lark(
-            grammar=open(path_grammar).read(), 
-            ambiguity='explicit', 
+            grammar=open(path_grammar).read(),
+            ambiguity='explicit',
             lexer='basic',
             propagate_positions=True,
         )
+
         self.toast = ToAst()
-    
-    def parse(self, text:str)->Ast:
+
+    def parse(self, text: str) -> Ast:
 
         st = self.lark.parse(text)
         ast = self.toast.transform(st)
         return ast
 
+
 class ToAst(Transformer):
 
-    def CNAME(self, x):
+    @v_args(meta=True)
+    def cname(self, meta, xs):
 
+        x = xs[0]
         x = str(x)
 
         if x == 'true':
-            return Bool(True)
+            return Bool(value=True, meta_info=MetaInfo(meta=meta))
         elif x == 'false':
-            return Bool(False)
+            return Bool(value=False, meta_info=MetaInfo(meta=meta))
         elif x.isupper():
-            return Var(x)
+            return Var(name=x, meta_info=MetaInfo(meta=meta))
         else:
-            return Id(x)
+            return Id(name=x, meta_info=MetaInfo(meta=meta))
 
-    def NUMBER(self, x):
-        return Num(float(x))
+    @v_args(meta=True)
+    def number(self, meta, xs):
 
-    def STRING(self, x):
-        
+        x = xs[0]
+        return Num(value=float(x), meta_info=MetaInfo(meta=meta))
+
+    @v_args(meta=True)
+    def string(self, meta, xs):
+
+        x = xs[0]
         x = str(x).strip('"')
-        return Str(x)
+        return Str(value=x, meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_call(self, meta, xs):
 
         x0 = xs[0]
         assert isinstance(x0, Id)
-        return FunCall(x0.name, xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return FunCall(fun_name=x0.name, args=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_not(self, meta, xs):
-        return Not(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Not(negated=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_add(self, meta, xs):
-        return BinOp('+', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='+', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_and(self, meta, xs):
-        return BinOp('and', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='and', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_or(self, meta, xs):
-        return BinOp('or', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='or', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_sub(self, meta, xs):
-        return BinOp('-', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='-', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_mul(self, meta, xs):
-        return BinOp('*', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='*', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_div(self, meta, xs):
-        return BinOp('/', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='/', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_gte(self, meta, xs):
-        return BinOp('>=', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='>=', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_lte(self, meta, xs):
-        return BinOp('<=', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='<=', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_gt(self, meta, xs):
-        return BinOp('>', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='>', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_lt(self, meta, xs):
-        return BinOp('<', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='<', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_eq(self, meta, xs):
-        return BinOp('==', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='==', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_neq(self, meta, xs):
-        return BinOp('!=', xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return BinOp(op='!=', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def object(self, meta, xs):
@@ -137,75 +148,75 @@ class ToAst(Transformer):
         props = xs[2] if len(xs) > 2 else {}
 
         match x0.name:
-            case 'sprite': return Sprite(x1.name, props).set_meta_info(MetaInfo.from_lark(meta))
-            case 'client': return Client(x1.name, props).set_meta_info(MetaInfo.from_lark(meta))
-            case 'keyboard': return Object(x1.name, props).set_meta_info(MetaInfo.from_lark(meta))
+            case 'sprite': return Sprite(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
+            case 'client': return Client(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
+            case 'keyboard': return Object(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def sequence(self, meta, xs):
-        return Sequence(xs[0]).set_meta_info(MetaInfo.from_lark(meta))
+        return Sequence(values=xs[0], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_rule(self, meta, xs):
-        return Rule(xs[0], xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Rule(condition=xs[0], consequence=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_def(self, meta, xs):
 
         fun_call = xs[0]
         assert isinstance(fun_call, FunCall)
-        return Def(fun_call.fun_name, fun_call.args, xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Def(name=fun_call.fun_name, args=fun_call.args, body=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_prog(self, meta, xs):
-        return Prog(xs).set_meta_info(MetaInfo.from_lark(meta))
+        return Prog(statements=xs, meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_dot(self, meta, xs):
-        
+
         x1 = xs[1]
         assert isinstance(x1, Id)
-        return Dot(xs[0], x1.name).set_meta_info(MetaInfo.from_lark(meta))
-    
+        return Dot(owner=xs[0], key=x1.name, meta_info=MetaInfo(meta=meta))
+
     @v_args(meta=True)
     def exp_asgn(self, meta, xs):
 
         dot = xs[0]
         assert isinstance(dot, Dot)
-        return Asgn(dot.owner, dot.key, xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Asgn(owner=dot.owner, key=dot.key, value=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_del(self, meta, xs):
-        return Del(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Del(delendum=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_print(self, meta, xs):
-        return Print(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Print(prindandum=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_find(self, meta, xs):
-        return Find(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Find(formula=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_create(self, meta, xs):
-        return Create(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Create(creandum=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_assert(self, meta, xs):
-        return Assert(xs[1]).set_meta_info(MetaInfo.from_lark(meta))
+        return Assert(assertion=xs[1], meta_info=MetaInfo(meta=meta))
 
     def pair(self, xs):
 
         x0 = xs[0]
         assert isinstance(x0, Id)
-        return [Str(x0.name), xs[1]]
+        return [Str(value=x0.name), xs[1]]
 
     def arg(self, xs):
 
-        if len(xs)==2:
+        if len(xs) == 2:
             return [xs[0], *xs[1]]
         else:
             return xs
 
     def kwarg(self, pairs):
-        return { p[0] :p[1] for p in pairs}
+        return {p[0]: p[1] for p in pairs}

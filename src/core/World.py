@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from core.KeyEvent import KeyEvent
 
 
-@dataclass
+@dataclass(kw_only=True)
 class World:
     objs: List['Object'] = field(default_factory=lambda: [])
     defs: List['Def'] = field(default_factory=lambda: [])

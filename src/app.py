@@ -34,7 +34,7 @@ def handle_message(data):
 @socketio.on('keyevent')
 def handle_keyevent(data):
 
-    e = KeyEvent(data['client_id'], data['key'], data['state'])
+    e = KeyEvent(client_id=data['client_id'], key=data['key'], state=data['state'])
     app.config['world'].put_event(e)
 
 def update_screen_loop(world:World):

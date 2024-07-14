@@ -6,7 +6,7 @@ from core.Str import Str
 from core.World import World
 from core.Bool import Bool
 
-@dataclass
+@dataclass(kw_only=True)
 class KeyEvent(Ast):
     
     client_id: str
@@ -20,6 +20,6 @@ class KeyEvent(Ast):
         if not client:
             raise Exception()
 
-        client.get('keyboard').execute(world).set(self.key, Str(self.state))
-        return Bool(True)
+        client.get('keyboard').execute(world).set(self.key, Str(value=self.state))
+        return Bool(value=True)
 

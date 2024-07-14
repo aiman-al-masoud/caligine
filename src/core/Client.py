@@ -10,13 +10,13 @@ if TYPE_CHECKING:
     from core.World import World
     from core.Ast import Ast
 
-@dataclass
+@dataclass(kw_only=True)
 class Client(Object):
 
     def init(self, world:'World')->'Ast':
 
-        self.set('keyboard', Keyboard('keyboard', {}).execute(world))
-        self.set('type', Str('client'))
+        self.set('keyboard', Keyboard(name='keyboard', props={}).execute(world))
+        self.set('type', Str(value='client'))
         
         if not self.has('avatar'):
             from core.Panic import Panic

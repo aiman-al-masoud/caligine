@@ -8,10 +8,10 @@ if TYPE_CHECKING:
     from core.Ast import Ast
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Keyboard(Object):
 
     def init(self, world: 'World')->'Ast':
 
-        self.set('type', Str('keyboard'))
+        self.set('type', Str(value='keyboard'))
         return self
