@@ -20,7 +20,7 @@ class Asgn(Ast):
     def execute(self, world: 'World') -> 'Ast':
 
         owner = self.owner.execute(world)
-        value = self.value.execute(world)
+        value = self.value.init(world).execute(world) # TODO: bad! if obj reassigned init called again!
         owner.set(self.key, value)
         return self.value
 

@@ -15,12 +15,19 @@
 # 
 # # cretinaggiare(1);
 
-create keyboard k{
-    crap: 10
-};
+# create keyboard k{
+#     crap: 10
+# };
+# 
+# print k.type;
+# print k.crap;
+# crap = k.crap +1;
+# print k.crap;
 
-print k.type;
-print k.crap;
-crap = k.crap +1;
-print k.crap;
 
+
+# print "ciao mondo!";
+
+x = 1;
+
+print x;

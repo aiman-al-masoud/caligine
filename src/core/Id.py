@@ -15,14 +15,7 @@ class Id(Ast):
     meta_info: Optional[MetaInfo] = field(default=None, compare=False)
 
     def execute(self, world: 'World') -> 'Ast':
-
-        object = world.get_obj(self.name)
-
-        if object is None:
-            from core.Panic import Panic
-            raise Panic(self, f'the object {self.name} is not defined')
-
-        return object
+        return world.get(self.name)
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
         return self

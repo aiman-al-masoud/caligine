@@ -19,7 +19,7 @@ class Find(Ast):
     def execute(self, world: 'World') -> 'Sequence':
 
         vars = self.formula.get_vars()
-        consts = world.get_objs()
+        consts = world.values()
         const_combos = combinations(consts, r=len(vars))
         assignments = (zip(vars, p) for p in const_combos)
         assignments_ok = []
@@ -27,7 +27,7 @@ class Find(Ast):
         for a in assignments:
 
             a = dict(a)
-            o = Object(name='', props=a)  # pyright:ignore
+            o = Object(props=a)  # pyright:ignore
             ast_concrete = self.formula.subst(o)
 
             if ast_concrete.execute(world):

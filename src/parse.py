@@ -24,7 +24,6 @@ from core.Str import Str
 from core.Ast import Ast
 from core.Assert import Assert
 from core.Sequence import Sequence
-from core.Create import Create
 
 
 class Parser:
@@ -146,14 +145,21 @@ class ToAst(Transformer):
         x1 = xs[1]
         assert isinstance(x0, Id)
         assert isinstance(x1, Id)
+
+        type = x0.name
+        name = x1.name
         props = xs[2] if len(xs) > 2 else {}
+        props[Str(value='name')] = Str(value=name)
 
-        match x0.name:
-            case 'sprite': return Sprite(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
-            case 'client': return Client(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
-            case 'keyboard': return Keyboard(name=x1.name, props=props, meta_info=MetaInfo(meta=meta))
+        cons = {
+            'sprite': Sprite,
+            'client': Client,
+            'keyboard': Keyboard
+        }.get(type, None)
 
-        raise Exception()
+        if not cons: raise Exception()
+
+        return cons(props=props, meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def sequence(self, meta, xs):
@@ -184,9 +190,19 @@ class ToAst(Transformer):
     @v_args(meta=True)
     def exp_asgn(self, meta, xs):
 
-        dot = xs[0]
-        assert isinstance(dot, Dot)
-        return Asgn(owner=dot.owner, key=dot.key, value=xs[1], meta_info=MetaInfo(meta=meta))
+        lval = xs[0]
+        rval = xs[1]
+
+        if isinstance(lval, Dot):
+
+            return Asgn(owner=lval.owner, key=lval.key, value=rval, meta_info=MetaInfo(meta=meta))
+
+        elif isinstance(lval, Id):
+
+            owner = Id(name='world', meta_info=MetaInfo(meta=meta))
+            return Asgn(owner=owner, key=lval.name, value=rval)
+
+        raise Exception()
 
     @v_args(meta=True)
     def exp_del(self, meta, xs):
@@ -202,7 +218,10 @@ class ToAst(Transformer):
 
     @v_args(meta=True)
     def exp_create(self, meta, xs):
-        return Create(creandum=xs[1], meta_info=MetaInfo(meta=meta))
+
+        creandum = xs[1]
+        assert isinstance(creandum, Object)
+        return Asgn(owner=Id(name='world'), key=creandum.get_name(), value=creandum)
 
     @v_args(meta=True)
     def exp_assert(self, meta, xs):

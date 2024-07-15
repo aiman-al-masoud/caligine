@@ -47,7 +47,7 @@ class Sprite(Object):
         repeat_rows = int(self.get('repeat_rows'))
 
         return {
-            'name': self.name,
+            'name': self.get_name(),
             'x': x,
             'y': y,
             'repeat_cols': repeat_cols,
@@ -89,7 +89,7 @@ class Sprite(Object):
         self.image = Image.open(path_img_abs)
     
     def __str__(self) -> str:
-        return f'sprite{{name={self.name}}}'
+        return f'sprite{{name={self.get_name()}}}'
 
 
 class SpriteJson(TypedDict):

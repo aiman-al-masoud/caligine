@@ -2,6 +2,7 @@ import os
 import sys
 from threading import Thread
 from flask import Flask, json
+from core.Client import Client
 from core.KeyEvent import KeyEvent
 from flask import Flask
 from flask_socketio import SocketIO
@@ -41,8 +42,9 @@ def update_screen_loop(world:World):
 
     while True:
 
-        for client in world.get_clients():
-            send_updated_sprites(client.name, include_image=False)
+        clients=  [x for x in world.values() if isinstance(x, Client)]
+        for client in clients:
+            send_updated_sprites(client.get_name(), include_image=False)
 
         sleep(0.1)
 
@@ -54,7 +56,8 @@ def send_updated_sprites(client_id:str, include_image:bool=False):
 
     world = app.config['world']
     assert isinstance(world, World)
-    client = world.get_client(client_id)
+    client = world.get(client_id)
+    assert isinstance(client, Client)
 
     if not client:
         socketio.emit('error', json.dumps({'error':f'Client {client_id} (you) does not exist.'}))

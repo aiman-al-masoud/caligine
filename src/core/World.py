@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
 import sys
 from threading import Thread
-from typing import TYPE_CHECKING, List, TextIO, Tuple
-from core.Sprite import Sprite
-from core.Client import Client
+from typing import TYPE_CHECKING, Dict, List, TextIO, Tuple
+from core.Bool import Bool
 from core.Def import Def
 from core.Rule import Rule
-from core.Object import Object
 from queue import Queue
 from time import sleep
+from core.Ast import Ast
+from core.Str import Str
+
 if TYPE_CHECKING:
     from core.KeyEvent import KeyEvent
 
 
 @dataclass(kw_only=True)
-class World:
-    objs: List['Object'] = field(default_factory=lambda: [])
+class World(Ast):
+
+    props: Dict[Ast, Ast] = field(default_factory=lambda: {})
     defs: List['Def'] = field(default_factory=lambda: [])
     rules: List['Rule'] = field(default_factory=lambda: [])
     event_queue: Queue['KeyEvent'] = field(default_factory=lambda: Queue())
@@ -25,30 +27,38 @@ class World:
     stdout:TextIO = sys.stdout
     stderr:TextIO = sys.stderr
 
+    def values(self):
+        return self.props.values()
+
+    def set(self, key:'str|Ast', value:'Ast'):
+
+        key = key if isinstance(key, Ast) else Str(value=key)
+        self.props[key] = value
+
+    def get(self, key:'str|Ast', default:'Ast|None'=None)->'Ast':
+        
+        key = key if isinstance(key, Ast) else Str(value=key)
+
+        if key == Str(value='world'):
+            return self
+
+        return self.props.get(key, default if default else Bool(value=False))
+
+    def delete(self, key:'str|Ast'):
+
+        key = key if isinstance(key, Ast) else Str(value=key)
+        del self.props[key]
+
+    def has(self, key: 'str|Ast'):
+
+        key = key if isinstance(key, Ast) else Str(value=key)
+        return key in self.props
+
     def add_def(self, d: Def):
         self.defs.append(d)
 
     def add_rule(self, r: Rule):
         self.rules.append(r)
-
-    def add_obj(self, o: Object):
-        self.objs.append(o)
-
-    def rm_obj(self, name: str):
-        self.objs = [x for x in self.objs if x.name != name]
-
-    def has_obj(self, name: str):
-        return bool([x for x in self.objs if x.name == name])
-
-    def get_obj(self, name: str):
-
-        if not self.has_obj(name):
-            return None
-
-        return [x for x in self.objs if x.name == name][0]
-
-    def get_objs(self):
-        return self.objs
 
     def tick(self):
 
@@ -74,23 +84,6 @@ class World:
 
     def start(self):
         Thread(target=self.game_loop).start()
-
-    def get_clients(self):
-        return [o for o in self.objs if isinstance(o, Client)]
-
-    def get_client(self, name: str):
-
-        clients = self.get_clients()
-        clients_filtered = [c for c in clients if c.name == name]
-
-        if not clients_filtered:
-            return None
-
-        client = clients_filtered[0]
-        return client
-
-    def get_sprites(self):
-        return [o for o in self.objs if isinstance(o, Sprite)]
 
     def set_canvas_size(self, w: int, h: int):
         self.canvas_size = (w, h)

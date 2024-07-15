@@ -15,13 +15,13 @@ class Client(Object):
 
     def init(self, world:'World')->'Ast':
 
-        self.set('keyboard', Keyboard(name='keyboard', props={}).execute(world))
+        self.set('keyboard', Keyboard(props={}).execute(world))
         self.set('type', Str(value='client'))
         
         if not self.has('avatar'):
             from core.Panic import Panic
             raise Panic(self, 'client must have an "avatar"')
-        
+
         avatar = self.get('avatar').execute(world)
 
         if not isinstance(avatar, Sprite):
@@ -29,6 +29,10 @@ class Client(Object):
             raise Panic(self, 'the "avatar" of a client must be a sprite')
         
         return self
+
+    def get(self, key: 'str|Ast', default: 'Ast|None' = None) -> 'Ast':
+
+        return super().get(key, default)
 
     def center_coords(self, world:'World'):
 
@@ -46,7 +50,7 @@ class Client(Object):
         offset_x = center_x - canvas_width//2
         offset_y = center_y - canvas_height//2
 
-        sprites = world.get_sprites()
+        sprites=  [x for x in world.values() if isinstance(x, Sprite)]
 
         sprites_data = [s.to_json(
             include_image=include_image,
@@ -62,13 +66,13 @@ class Client(Object):
 
         return {
             'sprites': sprites_data, 
-            'client_id': self.name,  
+            'client_id': self.get_name(),  
             'canvas_width': world.get_canvas_width(), 
             'canvas_height': world.get_canvas_height(), 
             'canvas_bg_color': world.get_canvas_bg_color(),
         }
 
     def __str__(self):
-        return f'client{{name={self.name}}}' 
+        return f'client{{name={self.get_name()}}}' 
 
 

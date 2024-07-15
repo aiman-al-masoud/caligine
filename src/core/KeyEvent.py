@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass
 from typing import Literal
 from core.Ast import Ast
@@ -15,11 +14,10 @@ class KeyEvent(Ast):
 
     def execute(self, world: 'World') -> 'Ast':
 
-        client = world.get_client(self.client_id)
-        
+        client = world.get(self.client_id)
+
         if not client:
             raise Exception()
 
         client.get('keyboard').execute(world).set(self.key, Str(value=self.state))
         return Bool(value=True)
-

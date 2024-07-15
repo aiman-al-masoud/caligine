@@ -3,7 +3,6 @@ from typing import List, Optional
 from core.Ast import Ast
 from typing import TYPE_CHECKING, List
 from core.MetaInfo import MetaInfo
-
 from core.Object import Object
 
 if TYPE_CHECKING:
@@ -24,7 +23,7 @@ class FunCall(Ast):
                 continue
 
             d = dict(zip(definition.args, self.args))
-            body = definition.body.subst(Object(name='',props= d))
+            body = definition.body.subst(Object(props= d))
             return body.execute(world)
         
         from core.Panic import Panic

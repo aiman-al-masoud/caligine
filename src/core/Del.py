@@ -22,7 +22,7 @@ class Del(Ast):
         # TODO: Remove assertion. Assign rather than create-with-name
         delendum = self.delendum.execute(world)
         assert isinstance(delendum, Object)
-        world.rm_obj(delendum.name)
+        world.delete(delendum.get_name())
         return Bool(value=True)
 
     def get_vars(self) -> List['Var']:

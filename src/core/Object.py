@@ -14,8 +14,7 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class Object(Ast):
 
-    name: str
-    props: Dict[Ast, Ast]
+    props: Dict[Ast, Ast] = field(default_factory=lambda: {})
     meta_info: Optional[MetaInfo] = field(default=None, compare=False)
 
     def init(self, world: 'World') -> 'Ast':
@@ -28,7 +27,7 @@ class Object(Ast):
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
 
-        return Object(name=self.name, props={k: v.subst(dictionary) for k, v in self.props.items()})
+        return Object(props={k: v.subst(dictionary) for k, v in self.props.items()})
 
     def get(self, key: 'str|Ast', default: 'Ast|None' = None) -> 'Ast':
 
@@ -44,6 +43,9 @@ class Object(Ast):
 
         key = key if isinstance(key, Ast) else Str(value=key)
         return key in self.props
+
+    def get_name(self):
+        return str(self.get('name'))
 
     def __str__(self) -> str:
         return str({str(k): str(v) for k, v in self.props.items()})
