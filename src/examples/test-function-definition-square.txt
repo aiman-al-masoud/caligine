@@ -1,0 +1,8 @@
+
+square(X){
+    tmp = X * X;
+    tmp;
+};
+
+assert square(5) == 25;
+exit;

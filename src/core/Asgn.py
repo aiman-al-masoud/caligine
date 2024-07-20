@@ -28,4 +28,10 @@ class Asgn(Ast):
         return self.owner.get_vars()+self.value.get_vars()
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Asgn(owner=self.owner.subst(dictionary), key=self.key, value=self.value.subst(dictionary))
+
+        return Asgn(
+            owner=self.owner.subst(dictionary), 
+            key=self.key, 
+            value=self.value.subst(dictionary),
+            meta_info = self.meta_info,
+        )

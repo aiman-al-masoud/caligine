@@ -17,16 +17,16 @@ class Sprite(Object):
 
     def init(self, world: 'World')->'Ast':
 
-        from core.Panic import Panic        
+        from core.Halt import Halt        
 
         if not self.has('pos_x'):
-            raise Panic(self, 'sprite must have a "pos_x"')
+            raise Halt(self, 'sprite must have a "pos_x"')
 
         if not self.has('pos_y'):
-            raise Panic(self, 'sprite must have a "pos_y"')
+            raise Halt(self, 'sprite must have a "pos_y"')
         
         if not self.has('image'):
-            raise Panic(self, 'sprite must have an "image"')
+            raise Halt(self, 'sprite must have an "image"')
 
         if not self.has('repeat_cols'):
             self.set('repeat_cols', Num(value=1))

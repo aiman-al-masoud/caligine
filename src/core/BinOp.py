@@ -29,4 +29,10 @@ class BinOp(Ast):
         return self.left.get_vars()+self.right.get_vars()
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return BinOp(op=self.op, left=self.left.subst(dictionary), right=self.right.subst(dictionary))
+        
+        return BinOp(
+            op=self.op, 
+            left=self.left.subst(dictionary), 
+            right=self.right.subst(dictionary),
+            meta_info = self.meta_info,
+        )

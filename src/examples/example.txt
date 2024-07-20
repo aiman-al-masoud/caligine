@@ -61,12 +61,25 @@ when c1.keyboard.ArrowRight == "down" then {
     c1.avatar.pos_x = c1.avatar.pos_x + 10;
 };
 
-when c1.keyboard.ArrowUp == "down" then c1.avatar.pos_y = c1.avatar.pos_y - 10;
-when c1.keyboard.ArrowDown == "down" then c1.avatar.pos_y = c1.avatar.pos_y + 10;
-when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = c1.avatar.pos_x - 10;
+when c1.keyboard.ArrowUp == "down" then {
+    c1.avatar.pos_y = c1.avatar.pos_y - 10;
+};
 
-when c2.keyboard.ArrowRight == "down" then c2.avatar.pos_x = c2.avatar.pos_x + 10;
-when c2.keyboard.ArrowLeft == "down" then c2.avatar.pos_x = c2.avatar.pos_x - 10;
+when c1.keyboard.ArrowDown == "down" then {
+    c1.avatar.pos_y = c1.avatar.pos_y + 10;
+};
+
+when c1.keyboard.ArrowLeft == "down" then {
+    c1.avatar.pos_x = c1.avatar.pos_x - 10;
+};
+
+when c2.keyboard.ArrowRight == "down" then {
+    c2.avatar.pos_x = c2.avatar.pos_x + 10;
+};
+
+when c2.keyboard.ArrowLeft == "down" then {
+    c2.avatar.pos_x = c2.avatar.pos_x - 10;
+};
 
 find foo(X);
 print "all right!";

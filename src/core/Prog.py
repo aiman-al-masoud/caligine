@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List, Optional
 from core.Ast import Ast
 from core.Bool import Bool
 from core.MetaInfo import MetaInfo
-from core.Panic import Panic
+from core.Halt import Halt
 
 if TYPE_CHECKING:
     from core.World import World
@@ -22,7 +22,7 @@ class Prog(Ast):
 
             res = statement.execute(world)
 
-            if isinstance(res, Panic):
+            if isinstance(res, Halt):
                 res.execute(world)
                 return res
         
@@ -30,4 +30,7 @@ class Prog(Ast):
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
         
-        return Prog(statements=[s.subst(dictionary) for s in self.statements])
+        return Prog(
+            statements=[s.subst(dictionary) for s in self.statements],
+            meta_info = self.meta_info,
+        )

@@ -26,11 +26,16 @@ class FunCall(Ast):
             body = definition.body.subst(Object(props= d))
             return body.execute(world)
         
-        from core.Panic import Panic
-        raise Panic(self, f'the function {self.fun_name} is not defined')
+        from core.Halt import Halt
+        raise Halt(self, f'the function {self.fun_name} is not defined')
 
     def get_vars(self) -> List['Var']:
         return [v for x in self.args for v in x.get_vars()]
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return FunCall(fun_name=self.fun_name, args=[x.subst(dictionary) for x in self.args])
+        
+        return FunCall(
+            fun_name=self.fun_name, 
+            args=[x.subst(dictionary) for x in self.args],
+            meta_info = self.meta_info,
+        )

@@ -27,7 +27,10 @@ class Object(Ast):
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
 
-        return Object(props={k: v.subst(dictionary) for k, v in self.props.items()})
+        return Object(
+            props={k: v.subst(dictionary) for k, v in self.props.items()},
+            meta_info = self.meta_info,
+        )
 
     def get(self, key: 'str|Ast', default: 'Ast|None' = None) -> 'Ast':
 
@@ -56,5 +59,5 @@ class Object(Ast):
             case '==': return Bool(value=self == other)
             case '!=': return Bool(value=self != other)
 
-        from core.Panic import Panic
-        raise Panic(self, f'unsupported operation {self} {op} {other}')
+        from core.Halt import Halt
+        raise Halt(self, f'unsupported operation {self} {op} {other}')

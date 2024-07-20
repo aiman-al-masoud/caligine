@@ -26,4 +26,8 @@ class Not(Ast):
         return self.negated.get_vars()
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Not(negated=self.negated.subst(dictionary))
+
+        return Not(
+            negated=self.negated.subst(dictionary),
+            meta_info = self.meta_info,
+        )

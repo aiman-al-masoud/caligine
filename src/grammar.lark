@@ -9,9 +9,10 @@
 ?start: exp
 ?exp: exp_prog
 ?exp_prog: exp_rule | (exp_prog ";")+ | "{" exp_prog "}"
-?exp_rule: exp_def | "when" exp "then" exp
+?exp_rule: exp_def | "when" exp "then" "{" exp "}" // TODO
 ?exp_def: exp_print | exp_call "{" exp "}"
-?exp_print: exp_assert | PRINT exp_print
+?exp_print: exp_exit | PRINT exp_print
+?exp_exit: exp_assert | _EXIT
 ?exp_assert: exp_del | ASSERT exp_assert
 ?exp_del: exp_find | DELETE exp_del
 ?exp_find: exp_create | FIND exp_find
@@ -46,6 +47,7 @@ DELETE: "delete"
 FIND: "find"
 NOT: "not"
 ASSERT: "assert"
+_EXIT: "exit"
 MINUS: "-"
 COMMENT: "#" /[^\n]/*
 

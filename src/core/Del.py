@@ -29,4 +29,8 @@ class Del(Ast):
         return self.delendum.get_vars()
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Del(delendum=self.delendum.subst(dictionary))
+
+        return Del(
+            delendum=self.delendum.subst(dictionary),
+            meta_info = self.meta_info,
+        )

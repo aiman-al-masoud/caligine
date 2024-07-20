@@ -1,3 +1,5 @@
+collisions = 0;
+
 create sprite trump{
     image: "./trump-small.png",
     pos_x: 100,
@@ -10,7 +12,7 @@ create sprite burger1{
     pos_x: 200,
     pos_y: 200
 };
- 
+
 create sprite burger2{
     image: "./hamburger-small.png",
     pos_x: 300,
@@ -56,6 +58,12 @@ collide(X,Y){
 when collide(trump, Y) then {
     delete Y;
     trump.score = trump.score +1;
+    collisions = collisions + 1;
+};
+
+when collisions == 3 then {
+    print "three collisions!";
+    exit;
 };
 
 c1.keyboard.ArrowRight = "down";

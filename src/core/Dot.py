@@ -25,4 +25,9 @@ class Dot(Ast):
         return self.owner.get_vars()
     
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Dot(owner=self.owner.subst(dictionary), key=self.key)
+
+        return Dot(
+            owner=self.owner.subst(dictionary), 
+            key=self.key,
+            meta_info = self.meta_info,
+        )

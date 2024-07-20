@@ -19,14 +19,14 @@ class Client(Object):
         self.set('type', Str(value='client'))
         
         if not self.has('avatar'):
-            from core.Panic import Panic
-            raise Panic(self, 'client must have an "avatar"')
+            from core.Halt import Halt
+            raise Halt(self, 'client must have an "avatar"')
 
         avatar = self.get('avatar').execute(world)
 
         if not isinstance(avatar, Sprite):
-            from core.Panic import Panic
-            raise Panic(self, 'the "avatar" of a client must be a sprite')
+            from core.Halt import Halt
+            raise Halt(self, 'the "avatar" of a client must be a sprite')
         
         return self
 

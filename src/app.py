@@ -1,6 +1,5 @@
 import os
 import sys
-from threading import Thread
 from flask import Flask, json
 from core.Client import Client
 from core.KeyEvent import KeyEvent
@@ -23,7 +22,7 @@ cli.show_server_banner = lambda *x: None # pyright:ignore
 def index():
 
     path_index = os.path.split(os.path.abspath(__file__))[0]+'/frontend/index.html'
-    return open(path_index).read()
+    return open(path_index, 'r').read()
 
 @socketio.on('client-connected')
 def handle_message(data):
@@ -38,6 +37,7 @@ def handle_keyevent(data):
     e = KeyEvent(client_id=data['client_id'], key=data['key'], state=data['state'])
     app.config['world'].put_event(e)
 
+# TODO: put this in World if you can
 def update_screen_loop(world:World):
 
     while True:
@@ -47,10 +47,6 @@ def update_screen_loop(world:World):
             send_updated_sprites(client.get_name(), include_image=False)
 
         sleep(0.1)
-
-def start_update_screen(world:World):
-
-    Thread(target=update_screen_loop, args=[world]).start()
 
 def send_updated_sprites(client_id:str, include_image:bool=False):
 

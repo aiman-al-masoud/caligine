@@ -13,8 +13,8 @@ class Str(Const):
             case '==': return Bool(value=self == other)
             case '!=': return Bool(value=self != other)
 
-        from core.Panic import Panic
-        raise Panic(self, f'unsupported operation {self} {op} {other}')
+        from core.Halt import Halt
+        raise Halt(self, f'unsupported operation {self} {op} {other}')
     
     def __str__(self):
         return self.value

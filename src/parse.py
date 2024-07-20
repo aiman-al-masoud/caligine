@@ -3,10 +3,13 @@ from lark import Lark, Transformer, v_args
 from core.Asgn import Asgn
 from core.Bool import Bool
 from core.Def import Def
+from core.Exit import Exit
 from core.Find import Find
 from core.FunCall import FunCall
+from core.Halt import Halt
 from core.Id import Id
 from core.Keyboard import Keyboard
+from core.Map import Map
 from core.MetaInfo import MetaInfo
 from core.Prog import Prog
 from core.Var import Var
@@ -154,7 +157,8 @@ class ToAst(Transformer):
         cons = {
             'sprite': Sprite,
             'client': Client,
-            'keyboard': Keyboard
+            'keyboard': Keyboard,
+            'map': Map,
         }.get(type, None)
 
         if not cons: raise Exception()
@@ -226,6 +230,10 @@ class ToAst(Transformer):
     @v_args(meta=True)
     def exp_assert(self, meta, xs):
         return Assert(assertion=xs[1], meta_info=MetaInfo(meta=meta))
+
+    @v_args(meta=True)
+    def exp_exit(self, meta, xs):
+        return Exit(meta_info=MetaInfo(meta=meta))
 
     def pair(self, xs):
 

@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, List
 
+from core.MetaInfo import MetaInfo
+
 if TYPE_CHECKING:
     from core.World import World
     from core.Var import Var
@@ -19,7 +21,9 @@ class Ast:
         return self
 
     def get(self, key:'str|Ast', default:'Ast|None'=None)->'Ast':
-        raise Exception()
+        # raise Exception()
+        from core.Bool import Bool
+        return Bool(value=False, meta_info=self.get_meta_info())
 
     def is_shorcircuit_binop(self, op:str)->bool:
         return False
@@ -32,3 +36,6 @@ class Ast:
     
     def get_vars(self)->List['Var']:
         raise Exception()
+    
+    def get_meta_info(self)->MetaInfo|None:
+        return getattr(self, 'meta_info', None)

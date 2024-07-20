@@ -22,4 +22,8 @@ class Print(Ast):
         return Bool(value=True)
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
-        return Print(prindandum=self.prindandum.subst(dictionary))
+
+        return Print(
+            prindandum=self.prindandum.subst(dictionary),
+            meta_info = self.meta_info,
+        )

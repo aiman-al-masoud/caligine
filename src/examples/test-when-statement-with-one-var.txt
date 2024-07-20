@@ -1,0 +1,18 @@
+
+create map slow {
+    counter: 0
+};
+
+create map fast {
+    counter: 0
+};
+
+when true then{
+    slow.counter = slow.counter + 1;
+    fast.counter = fast.counter + 2;
+};
+
+when X.counter > 10 then {
+    assert X.name == "fast";
+    exit;
+};

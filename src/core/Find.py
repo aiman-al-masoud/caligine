@@ -33,4 +33,14 @@ class Find(Ast):
             if ast_concrete.execute(world):
                 assignments_ok.append(o)
 
-        return Sequence(values=assignments_ok)
+        return Sequence(
+            values=assignments_ok, 
+            meta_info = self.meta_info,
+        )
+    
+    def subst(self, dictionary: 'Ast') -> 'Ast':
+
+        return Find(
+            formula=self.formula.subst(dictionary),
+            meta_info=self.meta_info,
+        )

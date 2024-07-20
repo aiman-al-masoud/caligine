@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 import sys
-from threading import Thread
 from typing import TYPE_CHECKING, Dict, List, TextIO, Tuple
 from core.Bool import Bool
 from core.Def import Def
@@ -42,7 +41,7 @@ class World(Ast):
         if key == Str(value='world'):
             return self
 
-        return self.props.get(key, default if default else Bool(value=False))
+        return self.props.get(key, default if default is not None else Bool(value=False, meta_info=key.get_meta_info()))
 
     def delete(self, key:'str|Ast'):
 
@@ -81,9 +80,6 @@ class World(Ast):
             self.process_event_queue()
             self.tick()
             sleep(0.1)
-
-    def start(self):
-        Thread(target=self.game_loop).start()
 
     def set_canvas_size(self, w: int, h: int):
         self.canvas_size = (w, h)
