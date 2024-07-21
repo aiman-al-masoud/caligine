@@ -24,8 +24,9 @@ class FunCall(Ast):
 
             d = dict(zip(definition.args, self.args))
             body = definition.body.subst(Object(props= d))
-            return body.execute(world)
-        
+            world_copy = world.copy()
+            return body.execute(world_copy)
+
         from core.Halt import Halt
         raise Halt(self, f'the function {self.fun_name} is not defined')
 

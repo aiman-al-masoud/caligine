@@ -192,7 +192,7 @@ class ToAst(Transformer):
 
     @v_args(meta=True)
     def exp_print(self, meta, xs):
-        return Print(prindandum=xs[1], meta_info=MetaInfo(meta=meta))
+        return Print(printandum=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_find(self, meta, xs):

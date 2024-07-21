@@ -12,18 +12,18 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class Print(Ast):
 
-    prindandum: Ast
+    printandum: Ast
     meta_info: Optional[MetaInfo] = field(default=None, compare=False)
 
     def execute(self, world: 'World') -> 'Ast':
 
-        world.stdout.write(str(self.prindandum.execute(world))+'\n')
+        world.stdout.write(str(self.printandum.execute(world))+'\n')
         world.stdout.flush()
         return Bool(value=True)
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
 
         return Print(
-            prindandum=self.prindandum.subst(dictionary),
+            printandum=self.printandum.subst(dictionary),
             meta_info = self.meta_info,
         )

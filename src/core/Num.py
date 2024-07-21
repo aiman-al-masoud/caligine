@@ -11,6 +11,11 @@ class Num(Const):
 
         from core.Halt import Halt
 
+        if op == '==':
+            return Bool(value=self == other)
+        elif op == '!=':
+            return Bool(value=self != other)
+
         if not isinstance(other, Num):
             raise Halt(self, 'number only supports operations with other numbers')
 
@@ -23,8 +28,6 @@ class Num(Const):
             case '<': return Bool(value=self.value < other.value)
             case '>=': return Bool(value=self.value >= other.value)
             case '<=': return Bool(value=self.value <= other.value)
-            case '==': return Bool(value=self.value == other.value)
-            case '!=': return Bool(value=self.value != other.value)
 
         raise Halt(self, f'unsupported operation {self} {op} {other}')
     

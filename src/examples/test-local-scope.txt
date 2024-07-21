@@ -1,0 +1,11 @@
+
+double (X){
+    result = X + 1
+    result
+}
+
+assert double(1) == 2
+
+assert result == false
+
+exit

@@ -26,6 +26,20 @@ class World(Ast):
     stdout:TextIO = sys.stdout
     stderr:TextIO = sys.stderr
 
+    def copy(self):
+        
+        return World(
+            props = self.props.copy(),
+            defs = self.defs.copy(),
+            rules = self.rules.copy(),
+            event_queue = Queue(),
+            canvas_size = self.canvas_size,
+            canvas_bg_color= self.canvas_bg_color,
+            path_script=self.path_script,
+            stdout=self.stdout,
+            stderr=self.stderr,
+        )
+
     def values(self):
         return self.props.values()
 
