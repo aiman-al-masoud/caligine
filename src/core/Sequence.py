@@ -7,15 +7,14 @@ from core.MetaInfo import MetaInfo
 if TYPE_CHECKING:
     from core.World import World
 
+
 @dataclass(kw_only=True)
 class Sequence(Ast):
 
-    values:List['Ast']
+    values: List['Ast']
+    index = 0
     meta_info: Optional[MetaInfo] = field(default=None, compare=False)
 
-    def get_values(self):
-        return self.values[:]
-    
     def execute(self, world: 'World') -> 'Ast':
         return Sequence(values=[v.execute(world) for v in self.values])
 
@@ -27,8 +26,21 @@ class Sequence(Ast):
         match op:
             case '==': return Bool(value=self == other)
             case '!=': return Bool(value=self != other)
-        
+
         from core.Halt import Halt
         raise Halt(self, f'unsupported operation {self} {op} {other}')
 
+    def __iter__(self):
         
+        return self
+
+    def __next__(self):
+
+        self.index += 1
+
+        try:
+            return self.values[self.index-1]
+        except IndexError:
+
+            self.index = 0
+            raise StopIteration

@@ -1,13 +1,10 @@
 import os
 import sys
-from flask import Flask, json
-from core.Client import Client
+from flask import Flask
 from core.KeyEvent import KeyEvent
 from flask import Flask
 from flask_socketio import SocketIO
-from time import sleep
 import logging
-from core.World import World
 
 
 app = Flask(__name__)
@@ -25,39 +22,14 @@ def index():
     return open(path_index, 'r').read()
 
 @socketio.on('client-connected')
-def handle_message(data):
+def handle_client_connected(data):
 
     client_id = data['client_id']
     print('client connected!', client_id)
-    send_updated_sprites(client_id, include_image=True)
+    app.config['world'].on_client_connected(client_id)
 
 @socketio.on('keyevent')
 def handle_keyevent(data):
 
     e = KeyEvent(client_id=data['client_id'], key=data['key'], state=data['state'])
     app.config['world'].put_event(e)
-
-# TODO: put this in World if you can
-def update_screen_loop(world:World):
-
-    while True:
-
-        clients=  [x for x in world.values() if isinstance(x, Client)]
-        for client in clients:
-            send_updated_sprites(client.get_name(), include_image=False)
-
-        sleep(0.1)
-
-def send_updated_sprites(client_id:str, include_image:bool=False):
-
-    world = app.config['world']
-    assert isinstance(world, World)
-    client = world.get(client_id)
-    assert isinstance(client, Client)
-
-    if not client:
-        socketio.emit('error', json.dumps({'error':f'Client {client_id} (you) does not exist.'}))
-        return
-
-    view = client.see_world(world, include_image)
-    socketio.emit('update-sprites', json.dumps(view))

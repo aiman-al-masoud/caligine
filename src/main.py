@@ -6,14 +6,14 @@ from core.Halt import Halt
 from core.Str import Str
 from parse import Parser
 from core.World import World
-from app import app, update_screen_loop
+from app import app
 from core.DocileThread import DocileThread
-
+from app import socketio
 
 if __name__ == '__main__':
 
     parser = Parser()
-    world = World()
+    world = World(send_event=socketio.emit)
 
     try:
         path_script = os.path.abspath(sys.argv[1])
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         app.config['world'] = world
         game_loop_thread = DocileThread(world.game_loop, [])
         server_thread = DocileThread(lambda: app.run(host='0.0.0.0', port=8000), [])
-        update_screen_thread = DocileThread(update_screen_loop, [world])
+        update_screen_thread = DocileThread(world.update_screen_loop, [])
 
         game_loop_thread.start()
         server_thread.start()

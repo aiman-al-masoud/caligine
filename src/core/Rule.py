@@ -22,7 +22,7 @@ class Rule(Ast):
 
     def apply(self, world:'World'):
 
-        for d in Find(formula=self.condition).execute(world).get_values():
+        for d in Find(formula=self.condition).execute(world):
 
             consequence = self.consequence.subst(d)
             consequence.execute(world)

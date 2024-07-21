@@ -1,13 +1,16 @@
-from dataclasses import dataclass, field
 import sys
-from typing import TYPE_CHECKING, Dict, List, TextIO
+import json
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Callable, Dict, List, TextIO
 from core.Bool import Bool
 from core.Def import Def
 from core.Rule import Rule
+from core.Client import Client
 from queue import Queue
 from time import sleep
 from core.Ast import Ast
 from core.Str import Str
+
 
 if TYPE_CHECKING:
     from core.KeyEvent import KeyEvent
@@ -21,6 +24,7 @@ class World(Ast):
     rules: List['Rule'] = field(default_factory=lambda: [])
     event_queue: Queue['KeyEvent'] = field(default_factory=lambda: Queue())
     stdout:TextIO = sys.stdout
+    send_event:Callable[[str, str], None]
 
     def copy(self):
         
@@ -30,6 +34,7 @@ class World(Ast):
             rules = self.rules.copy(),
             event_queue = Queue(),
             stdout=self.stdout,
+            send_event=self.send_event,
         )
 
     def values(self):
@@ -89,3 +94,21 @@ class World(Ast):
             self.process_event_queue()
             self.tick()
             sleep(0.1)
+
+    def update_screen_loop(self):
+
+        while True:
+
+            clients = [x for x in self.values() if isinstance(x, Client)]
+            for client in clients:
+                view = client.see_world(self)
+                self.send_event('update-sprites', json.dumps(view))
+
+            sleep(0.1)
+
+    def on_client_connected(self, client_id:str):
+
+        client = self.get(client_id)
+        assert isinstance(client, Client)
+        view = client.see_world(self, include_image=True)
+        self.send_event('update-sprites', json.dumps(view))
