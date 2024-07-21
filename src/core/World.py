@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 import sys
-from typing import TYPE_CHECKING, Dict, List, TextIO, Tuple
+from typing import TYPE_CHECKING, Dict, List, TextIO
 from core.Bool import Bool
 from core.Def import Def
 from core.Rule import Rule
@@ -20,11 +20,7 @@ class World(Ast):
     defs: List['Def'] = field(default_factory=lambda: [])
     rules: List['Rule'] = field(default_factory=lambda: [])
     event_queue: Queue['KeyEvent'] = field(default_factory=lambda: Queue())
-    canvas_size: Tuple[int, int] = (400, 400)
-    canvas_bg_color: str = 'rgb(100, 100, 100)'
-    path_script:str = ''
     stdout:TextIO = sys.stdout
-    stderr:TextIO = sys.stderr
 
     def copy(self):
         
@@ -33,17 +29,16 @@ class World(Ast):
             defs = self.defs.copy(),
             rules = self.rules.copy(),
             event_queue = Queue(),
-            canvas_size = self.canvas_size,
-            canvas_bg_color= self.canvas_bg_color,
-            path_script=self.path_script,
             stdout=self.stdout,
-            stderr=self.stderr,
         )
 
     def values(self):
         return self.props.values()
 
     def set(self, key:'str|Ast', value:'Ast'):
+
+        if value not in self.values():
+            value.init(self)
 
         key = key if isinstance(key, Ast) else Str(value=key)
         self.props[key] = value
@@ -94,25 +89,3 @@ class World(Ast):
             self.process_event_queue()
             self.tick()
             sleep(0.1)
-
-    def set_canvas_size(self, w: int, h: int):
-        self.canvas_size = (w, h)
-
-    def get_canvas_width(self):
-        return self.canvas_size[0]
-
-    def get_canvas_height(self):
-        return self.canvas_size[1]
-
-    def set_canvas_bg_color(self, canvas_bg_color):
-        self.canvas_bg_color = canvas_bg_color
-
-    def get_canvas_bg_color(self):
-        return self.canvas_bg_color
-
-    def set_path_script(self, path_script:str):
-        self.path_script = path_script
-
-    def get_path_script(self):
-        return self.path_script
-        

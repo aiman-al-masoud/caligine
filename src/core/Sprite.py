@@ -52,7 +52,7 @@ class Sprite(Object):
             'y': y,
             'repeat_cols': repeat_cols,
             'repeat_rows': repeat_rows,
-            'image_base64': self.image_base64() if include_image else None
+            'image_base64': self.image_base64() if include_image else None,
         }
 
     def image_base64(self)->str:
@@ -81,7 +81,7 @@ class Sprite(Object):
     
     def load_image(self, world:'World'):
 
-        path_script = world.path_script
+        path_script = str(world.get('path_script'))
         path_img_rel = str(self.get('image'))
         path_folder = os.path.split(path_script)[0]
         path_img_abs = os.path.join(path_folder, path_img_rel)

@@ -1,4 +1,7 @@
+canvas_bg_color = "rgb(100,100,100)";
 collisions = 0;
+canvas_width = 400;
+canvas_height = 400;
 
 create sprite trump{
     image: "./trump-small.png",

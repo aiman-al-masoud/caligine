@@ -44,8 +44,8 @@ class Client(Object):
     def get_sprite_data_from_own_perspective(self, world:'World', include_image:bool=False):
 
         center_x, center_y = self.center_coords(world)
-        canvas_width = world.get_canvas_width()
-        canvas_height = world.get_canvas_height()
+        canvas_width = int(world.get('canvas_width'))
+        canvas_height = int(world.get('canvas_height'))
 
         offset_x = center_x - canvas_width//2
         offset_y = center_y - canvas_height//2
@@ -67,9 +67,9 @@ class Client(Object):
         return {
             'sprites': sprites_data, 
             'client_id': self.get_name(),  
-            'canvas_width': world.get_canvas_width(), 
-            'canvas_height': world.get_canvas_height(), 
-            'canvas_bg_color': world.get_canvas_bg_color(),
+            'canvas_width': int(world.get('canvas_width')), 
+            'canvas_height': int(world.get('canvas_height')), 
+            'canvas_bg_color': str(world.get('canvas_bg_color')),
         }
 
     def __str__(self):

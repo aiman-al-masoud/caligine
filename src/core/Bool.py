@@ -18,8 +18,7 @@ class Bool(Const):
             case '==': return Bool(value=self == other)
             case '!=': return Bool(value=self != other)
         
-        from core.Halt import Halt
-        raise Halt(self, f'operation not supported {self} {op} {other}')
+        return Bool(value=False)
 
     def is_shorcircuit_binop(self, op: str) -> bool:
         
