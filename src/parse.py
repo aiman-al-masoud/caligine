@@ -6,7 +6,6 @@ from core.Def import Def
 from core.Exit import Exit
 from core.Find import Find
 from core.FunCall import FunCall
-from core.Halt import Halt
 from core.Id import Id
 from core.Keyboard import Keyboard
 from core.Map import Map
@@ -39,7 +38,8 @@ class Parser:
         self.lark = Lark(
             grammar=open(path_grammar).read(),
             ambiguity='explicit',
-            lexer='basic',
+            # lexer='basic',
+            lexer = 'dynamic',
             propagate_positions=True,
         )
 
@@ -93,9 +93,6 @@ class ToAst(Transformer):
     def exp_not(self, meta, xs):
         return Not(negated=xs[1], meta_info=MetaInfo(meta=meta))
 
-    @v_args(meta=True)
-    def exp_add(self, meta, xs):
-        return BinOp(op='+', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_and(self, meta, xs):
@@ -106,40 +103,16 @@ class ToAst(Transformer):
         return BinOp(op='or', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
-    def exp_sub(self, meta, xs):
-        return BinOp(op='-', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
+    def exp_term(self, meta, xs):
+        return BinOp(op=xs[1], left=xs[0], right=xs[2], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
-    def exp_mul(self, meta, xs):
-        return BinOp(op='*', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
+    def exp_factor(self, meta, xs):
+        return BinOp(op=xs[1], left=xs[0], right=xs[2], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
-    def exp_div(self, meta, xs):
-        return BinOp(op='/', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
-
-    @v_args(meta=True)
-    def exp_gte(self, meta, xs):
-        return BinOp(op='>=', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
-
-    @v_args(meta=True)
-    def exp_lte(self, meta, xs):
-        return BinOp(op='<=', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
-
-    @v_args(meta=True)
-    def exp_gt(self, meta, xs):
-        return BinOp(op='>', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
-
-    @v_args(meta=True)
-    def exp_lt(self, meta, xs):
-        return BinOp(op='<', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
-
-    @v_args(meta=True)
-    def exp_eq(self, meta, xs):
-        return BinOp(op='==', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
-
-    @v_args(meta=True)
-    def exp_neq(self, meta, xs):
-        return BinOp(op='!=', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
+    def exp_cmp(self, meta, xs):
+        return BinOp(op=xs[1], left=xs[0], right=xs[2], meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def object(self, meta, xs):
@@ -178,10 +151,15 @@ class ToAst(Transformer):
 
         fun_call = xs[0]
         assert isinstance(fun_call, FunCall)
-        return Def(name=fun_call.fun_name, args=fun_call.args, body=xs[1], meta_info=MetaInfo(meta=meta))
+        body = xs[1]
+        return Def(name=fun_call.fun_name, args=fun_call.args, body=body, meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)
     def exp_prog(self, meta, xs):
+        return Prog(statements=xs, meta_info=MetaInfo(meta=meta))
+
+    @v_args(meta=True)
+    def exp_block(self, meta, xs):
         return Prog(statements=xs, meta_info=MetaInfo(meta=meta))
 
     @v_args(meta=True)

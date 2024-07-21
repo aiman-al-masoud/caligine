@@ -1,1 +1,3 @@
 lark
+flask
+flask-socketio

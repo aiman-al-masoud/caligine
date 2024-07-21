@@ -20,6 +20,7 @@ class Del(Ast):
     def execute(self, world: 'World') -> 'Ast':
 
         # TODO: Remove assertion. Assign rather than create-with-name
+        # or delete the reference, not the object
         delendum = self.delendum.execute(world)
         assert isinstance(delendum, Object)
         world.delete(delendum.get_name())

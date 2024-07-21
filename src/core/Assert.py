@@ -17,7 +17,7 @@ class Assert(Ast):
     def execute(self, world: 'World') -> 'Ast':
         
         if not self.assertion.execute(world):
-            raise Halt(self, f'assertion failed')#.execute(world)
+            raise Halt(self, f'assertion failed')
         
         return Bool(value=True)
 

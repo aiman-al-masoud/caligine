@@ -1,0 +1,11 @@
+x = 0
+
+when true then x = x + 1
+
+when x == 10 
+    then y = "ciao"
+
+when x > 10 then {
+    assert y == "ciao"
+    exit
+}

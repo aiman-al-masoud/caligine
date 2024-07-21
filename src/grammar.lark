@@ -6,32 +6,26 @@
 %ignore WS
 %ignore COMMENT
 
-?start: exp
-?exp: exp_prog
-?exp_prog: exp_rule | (exp_prog ";")+ | "{" exp_prog "}"
-?exp_rule: exp_def | "when" exp "then" "{" exp "}" // TODO
-?exp_def: exp_print | exp_call "{" exp "}"
+?start: exp_prog
+exp_prog: exp_stmt+
+exp_block: "{" exp_stmt+ "}"
+?exp_stmt: exp _STMT_SEP
+?exp: exp_rule | exp_block
+?exp_rule: exp_def | "when" exp "then" exp
+?exp_def: exp_print | exp_call exp_block
 ?exp_print: exp_exit | PRINT exp_print
 ?exp_exit: exp_assert | _EXIT
 ?exp_assert: exp_del | ASSERT exp_assert
 ?exp_del: exp_find | DELETE exp_del
 ?exp_find: exp_create | FIND exp_find
 ?exp_create: exp_asgn | CREATE exp_create
-?exp_asgn: exp_or | exp_dot "=" exp_or
-?exp_or: exp_and | exp_and "or" exp_or+
-?exp_and: exp_eq | exp_eq "and" exp_and+
-?exp_eq: exp_neq | exp_neq "==" exp_eq+
-?exp_neq: exp_lt | exp_lt "!=" exp_neq+
-?exp_lt: exp_gt | exp_gt "<" exp_lt+
-?exp_gt: exp_lte | exp_lte ">" exp_gt+
-?exp_lte: exp_gte | exp_gte "<=" exp_lte+
-?exp_gte: exp_sub | exp_sub ">=" exp_gte+
-?exp_sub: exp_add | exp_add "-" exp_sub+
-?exp_add: exp_div | exp_div "+" exp_add+
-?exp_div: exp_mul | exp_mul "/" exp_div+
-?exp_mul: exp_not | exp_not "*" exp_mul+
-?exp_not: exp_min | NOT exp_not
-?exp_min: exp_dot | MINUS exp_min
+?exp_asgn: (exp_asgn "=")? exp_or
+?exp_or: (exp_or "or")? exp_and
+?exp_and: (exp_and "and")? exp_cmp
+?exp_cmp: (exp_cmp COMPARE)? exp_term
+?exp_term: (exp_term ADD)? exp_factor
+?exp_factor: (exp_factor MUL)? exp_not
+?exp_not: exp_dot | NOT exp_not // TODO: unary exp and -
 ?exp_dot: exp_call | exp_dot "." cname
 ?exp_call: atom | cname "(" arg? ")"
 ?atom: object | sequence | cname | number | string | "(" exp ")"
@@ -48,8 +42,11 @@ FIND: "find"
 NOT: "not"
 ASSERT: "assert"
 _EXIT: "exit"
-MINUS: "-"
 COMMENT: "#" /[^\n]/*
+MUL: "*" | "/"
+COMPARE:  "==" | "!=" | "<" | ">" | "<=" | ">="
+ADD: "+" | "-"
+_STMT_SEP: ";" | "\n"
 
 cname: CNAME
 number: NUMBER

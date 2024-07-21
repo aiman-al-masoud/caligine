@@ -52,7 +52,7 @@ collide(X,Y){
     and X.right_x >= Y.pos_x 
     and X.pos_x <= Y.right_x
     and X.bottom_y >= Y.pos_y
-    and X.pos_y <= Y.bottom_y
+    and X.pos_y <= Y.bottom_y;
 };
 
 when collide(trump, Y) then {

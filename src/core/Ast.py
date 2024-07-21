@@ -21,7 +21,7 @@ class Ast:
         return self
 
     def get(self, key:'str|Ast', default:'Ast|None'=None)->'Ast':
-        # raise Exception()
+
         from core.Bool import Bool
         return Bool(value=False, meta_info=self.get_meta_info())
 
