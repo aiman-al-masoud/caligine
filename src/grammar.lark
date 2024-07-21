@@ -19,7 +19,8 @@ exp_block: "{" exp_stmt+ "}"
 ?exp_del: exp_find | DELETE exp_del
 ?exp_find: exp_create | FIND exp_find
 ?exp_create: exp_asgn | CREATE exp_create
-?exp_asgn: (exp_asgn "=")? exp_or
+?exp_asgn: (exp_asgn "=")? exp_reasgn
+?exp_reasgn: (exp_reasgn REASS)? exp_or
 ?exp_or: (exp_or "or")? exp_and
 ?exp_and: (exp_and "and")? exp_cmp
 ?exp_cmp: (exp_cmp COMPARE)? exp_term
@@ -43,10 +44,11 @@ NOT: "not"
 ASSERT: "assert"
 _EXIT: "exit"
 COMMENT: "#" /[^\n]/*
-MUL: "*" | "/"
+MUL: "*" | "/" | "%"
 COMPARE:  "==" | "!=" | "<" | ">" | "<=" | ">="
 ADD: "+" | "-"
 _STMT_SEP: ";" | "\n"
+REASS: "+=" | "-=" | "*=" | "/="
 
 cname: CNAME
 number: NUMBER

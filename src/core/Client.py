@@ -13,19 +13,20 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class Client(Object):
 
+
     def init(self, world:'World')->'Ast':
+
+        from core.Halt import Halt
 
         self.set('keyboard', Keyboard(props={}).execute(world))
         self.set('type', Str(value='client'))
         
         if not self.has('avatar'):
-            from core.Halt import Halt
             raise Halt(self, 'client must have an "avatar"')
 
         avatar = self.get('avatar').execute(world)
 
         if not isinstance(avatar, Sprite):
-            from core.Halt import Halt
             raise Halt(self, 'the "avatar" of a client must be a sprite')
         
         return self

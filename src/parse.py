@@ -93,7 +93,6 @@ class ToAst(Transformer):
     def exp_not(self, meta, xs):
         return Not(negated=xs[1], meta_info=MetaInfo(meta=meta))
 
-
     @v_args(meta=True)
     def exp_and(self, meta, xs):
         return BinOp(op='and', left=xs[0], right=xs[1], meta_info=MetaInfo(meta=meta))
@@ -212,6 +211,17 @@ class ToAst(Transformer):
     @v_args(meta=True)
     def exp_exit(self, meta, xs):
         return Exit(meta_info=MetaInfo(meta=meta))
+
+    @v_args(meta=True)
+    def exp_reasgn(self, meta, xs):
+
+        left = xs[0]
+        assert isinstance(left, Id)
+        op = xs[1]
+        delta = xs[2]
+        op = str(op).replace('=', '')
+        right = BinOp(op=op, left=left, right=delta, meta_info=MetaInfo(meta=meta))
+        return Asgn(owner=Id(name='world'), key=left.name, value=right)
 
     def pair(self, xs):
 

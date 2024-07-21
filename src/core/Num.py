@@ -24,6 +24,7 @@ class Num(Const):
             case '-': return Num(value=self.value - other.value)
             case '*': return Num(value=self.value * other.value)
             case '/': return Num(value=self.value / other.value)
+            case '%': return Num(value=self.value % other.value)
             case '>': return Bool(value=self.value > other.value)
             case '<': return Bool(value=self.value < other.value)
             case '>=': return Bool(value=self.value >= other.value)
