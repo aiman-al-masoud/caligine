@@ -31,5 +31,12 @@ def handle_client_connected(data):
 @socketio.on('keyevent')
 def handle_keyevent(data):
 
-    e = KeyEvent(client_id=data['client_id'], key=data['key'], state=data['state'])
+    e = KeyEvent(client_id=data['client_id'], key=clean_key_name(data['key']), state=data['state'])
     app.config['world'].put_event(e)
+
+def clean_key_name(key_name:str):
+    
+    if key_name == ' ':
+        return 'Space'
+    else:
+        return key_name

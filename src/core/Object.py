@@ -27,7 +27,7 @@ class Object(Ast):
 
     def subst(self, dictionary: 'Ast') -> 'Ast':
 
-        return Object(
+        return self.__class__(
             props={k: v.subst(dictionary) for k, v in self.props.items()},
             meta_info = self.meta_info,
         )

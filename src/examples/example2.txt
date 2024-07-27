@@ -1,0 +1,78 @@
+canvas_bg_color = "rgb(100,100,100)";
+canvas_width = 700;
+canvas_height = 400;
+
+
+# create sprite ice1 {
+#     image: "./ice-cream.png",
+#     pos_x: 100,
+#     pos_y: 100,
+#     vel_x: 0,
+#     vel_y: 0
+# };
+# 
+
+create sprite trump {
+    image: "./trump-small.png",
+    pos_x: 100,
+    pos_y: 200,
+    vel_x: 0,
+    vel_y: 0
+};
+
+# 
+# create sprite biden {
+#     image: "./biden-small.png",
+#     pos_x: 200,
+#     pos_y: 200,
+#     vel_x: 0,
+#     vel_y: 0
+# };
+
+create client c1 {
+    avatar: trump
+};
+
+when c1.keyboard.ArrowUp == "down" then c1.avatar.pos_y = c1.avatar.pos_y - 10;
+when c1.keyboard.ArrowDown == "down" then c1.avatar.pos_y = c1.avatar.pos_y + 10;
+when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = c1.avatar.pos_x - 10;
+when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = c1.avatar.pos_x + 10;
+
+#when c1.keyboard.ArrowRight == "down" then c1.avatar.vel_x = 50;
+#when c1.keyboard.ArrowRight != "down" then c1.avatar.vel_x = 0;
+#
+#when c1.keyboard.ArrowLeft == "down" then c1.avatar.vel_x = 0 - 50;
+#when c1.keyboard.ArrowLeft != "down" then c1.avatar.vel_x = 0;
+#
+#when c1.keyboard.ArrowUp == "down" then c1.avatar.vel_y = 0 -50;
+#when c1.keyboard.ArrowUp != "down" then c1.avatar.vel_y = 0;
+#
+#when c1.keyboard.ArrowDown == "down" then c1.avatar.vel_y = 50;
+#when c1.keyboard.ArrowDown != "down" then c1.avatar.vel_y = 0;
+
+
+# dt = 0.1;
+# 
+# when X.type == "sprite" then{
+# 
+#     X.pos_x = X.pos_x + dt * X.vel_x;
+#     X.pos_y = X.pos_y + dt * X.vel_y;
+# }
+
+when c1.keyboard.Space == "down" then {
+
+    print "space was pressed!!!!"
+    create sprite ice2{
+        image: "./ice-cream.png",
+        pos_x: 100,
+        pos_y: 200,
+        vel_x: 0,
+        vel_y: 0
+    }
+    print find X.type == "sprite"
+
+}
+
+
+print "started!";
+
