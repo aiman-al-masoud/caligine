@@ -1,0 +1,70 @@
+
+# canvas configuration (for front-end)
+canvas_bg_color = "rgb(100,100,100)";
+canvas_width = 400;
+canvas_height = 400;
+
+# number of collisions counter
+collisions = 0;
+
+create sprite trump{
+    image: "./trump-small.png",
+    pos_x: 100,
+    pos_y: 200,
+    score: 0
+};
+
+# creating some sprites
+
+create sprite burger1{
+    image: "./hamburger-small.png",
+    pos_x: 200,
+    pos_y: 200
+};
+
+create sprite burger2{
+    image: "./hamburger-small.png",
+    pos_x: 300,
+    pos_y: 200
+};
+ 
+create sprite burger3{
+    image: "./hamburger-small.png",
+    pos_x: 400,
+    pos_y: 200
+};
+
+# creating a new client and linking it to a sprite as its avatar
+create client c1 {
+    avatar: trump
+};
+
+# defining what happens when client c1's keyboard is used
+when c1.keyboard.ArrowRight == "down" then c1.avatar.pos_x = c1.avatar.pos_x + 10;
+when c1.keyboard.ArrowLeft == "down" then c1.avatar.pos_x = c1.avatar.pos_x - 10;
+when c1.keyboard.ArrowUp == "down" then c1.avatar.pos_y = c1.avatar.pos_y - 10;
+when c1.keyboard.ArrowDown == "down" then c1.avatar.pos_y = c1.avatar.pos_y + 10;
+
+# defining a collision between two sprites (assuming the sprites are rectangles)
+collide(X,Y){
+    X.type == "sprite"
+    and Y.type == "sprite"
+    and X != Y
+    and X.right_x >= Y.pos_x 
+    and X.pos_x <= Y.right_x
+    and X.bottom_y >= Y.pos_y
+    and X.pos_y <= Y.bottom_y;
+};
+
+# adding a collision rule for when the trump sprite collides with any other sprite
+when collide(trump, Y) then {
+    delete Y;
+    trump.score = trump.score +1;
+    collisions = collisions + 1;
+};
+
+# add a termination/game-over rule
+when collisions == 3 then {
+    print "three collisions!";
+    exit;
+};
