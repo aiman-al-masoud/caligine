@@ -13,6 +13,7 @@ when true then{
 }
 
 when X.counter > 10 then {
+    print X.name
     assert X.name == "fast"
     exit
 }
