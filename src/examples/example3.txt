@@ -61,6 +61,7 @@ when collide(trump, Y) then {
     delete Y;
     trump.score = trump.score +1;
     collisions = collisions + 1;
+    print trump.score;
 };
 
 # add a termination/game-over rule
